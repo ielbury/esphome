@@ -59,7 +59,7 @@ void VL53L1XSensor::loop() {
     } else {
       ESP_LOGW(TAG, "'%s' - %s", this->name_.c_str(),
                VL53L1X::range_status_to_string(vl53l1x_->ranging_data.range_status));
-      this->publish_state(NAN);
+      this->publish_state(0);
     }
   }
 }
