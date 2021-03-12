@@ -560,6 +560,7 @@ def lint_inclusive_language(fname, match):
         "esphome/components/mqtt/mqtt_component.h",
         "esphome/components/output/binary_output.h",
         "esphome/components/output/float_output.h",
+        "esphome/components/nextion/nextion_base.h",
         "esphome/components/sensor/sensor.h",
         "esphome/components/stepper/stepper.h",
         "esphome/components/switch/switch.h",
