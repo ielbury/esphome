@@ -1,12 +1,29 @@
 #pragma once
+#include "esphome/core/defines.h"
 #include "esphome/core/color.h"
 #include "nextion_component_base.h"
 namespace esphome {
 namespace nextion {
 
+#define USE_TFT_UPLOAD
+
+//#define NEXTION_PROTOCOL_LOG  // For testing purposes
+
+#ifdef ESPHOME_LOG_HAS_VERY_VERBOSE
+#define NEXTION_PROTOCOL_LOG
+#endif
+
+#ifdef NEXTION_PROTOCOL_LOG
+#ifdef ESPHOME_LOG_HAS_VERY_VERBOSE
+#define ESP_LOGN(tag, ...) esph_log_vv(tag, __VA_ARGS__)
+#else
+#define ESP_LOGN(tag, ...) esph_log_d(tag, __VA_ARGS__)
+#endif
+#endif
+
 class NextionBase;
 
-static const uint8_t LOOP_TIMEOUT_MS = 5;
+static const uint8_t LOOP_TIMEOUT_MS = 200;
 
 class NextionBase {
  public:

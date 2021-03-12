@@ -4,12 +4,7 @@
 #include "esphome/components/uart/uart.h"
 #include "nextion_base.h"
 #include "nextion_component.h"
-// #include "nextion_textsensor.h"
-// #include "nextion_switch.h"
-// #include "nextion_sensor.h"
-// #include "nextion_binarysensor.h"
-#include "esphome/core/color.h"
-//#define USE_TFT_UPLOAD
+#include "esphome/components/display/display_color_utils.h"
 
 #if defined(USE_ETHERNET) || defined(USE_WIFI)
 #ifdef ARDUINO_ARCH_ESP32
@@ -702,7 +697,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
 
  protected:
   std::deque<NextionComponentBase *> nextion_queue_;
-  uint16_t recv_ret_string_(String &response, uint32_t timeout, bool recv_flag);
+  uint16_t recv_ret_string_(std::string &response, uint32_t timeout, bool recv_flag);
   void all_components_send_state_(bool ignore_needs_update = false);
 
   /**
@@ -711,7 +706,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    */
   bool ignore_is_setup_ = false;
   uint8_t nextion_event_;
-  bool nextion_has_event_ = false;
+  // bool nextion_has_event_ = false;
 
   bool process_nextion_commands_();
   bool is_updating_ = false;
@@ -752,19 +747,19 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    */
   int content_length_ = 0;
   int tft_size_ = 0;
-  int upload_by_chunks_(int range_start);
+  int upload_by_chunks_(HTTPClient *http, int range_start);
 
   bool upload_with_range_(uint32_t range_start, uint32_t range_end);
 
-  /**
-   * start update tft file to nextion.
-   *
-   * @param Stream &myFile
-   * @param int contentLength Total size of the file
-   * @param uint32_t chunk_size
-   * @return next chunk location or 0 for success
-   */
-  uint32_t upload_send_stream_(Stream &my_file, int range);
+  // /**
+  //  * start update tft file to nextion.
+  //  *
+  //  * @param Stream &myFile
+  //  * @param int contentLength Total size of the file
+  //  * @param uint32_t chunk_size
+  //  * @return next chunk location or 0 for success
+  //  */
+  // uint32_t upload_send_stream_(Stream &my_file, int range);
 
   /**
    * start update tft file to nextion.
@@ -804,13 +799,13 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   bool upload_first_chunk_sent_ = false;
 #endif
 
-#ifdef ESPHOME_LOG_HAS_VERY_VERBOSE
+#ifdef NEXTION_PROTOCOL_LOG
   void print_queue_members_();
 #endif
+  void reset_(bool reset_nextion = true);
 
-  uint8_t command_data_[1024];
-
-  uint16_t command_data_length_ = 0;  // total length of data (including end bytes)
+  std::string command_data_;
+  std::string command_delimiter_;
 };
 }  // namespace nextion
 }  // namespace esphome
