@@ -206,7 +206,7 @@ void Nextion::upload_tft() {
   this->recv_ret_string_(response, 2000, true);  // This can take some time to return
 
   // The Nextion display will, if it's ready to accept data, send a 0x05 byte.
-  ESP_LOGD(TAG, "Upgrade response is %s %d", response.c_str(), response.length());
+  ESP_LOGD(TAG, "Upgrade response is %s %zu", response.c_str(), response.length());
 
   for (int i = 0; i < response.length(); i++) {
     ESP_LOGD(TAG, "Available %d : 0x%02X", i, response[i]);
