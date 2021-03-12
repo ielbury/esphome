@@ -43,7 +43,9 @@ int Nextion::upload_by_chunks_(HTTPClient *http, int range_start) {
       ESP_LOGD(TAG, "upload_by_chunks_: connection failed");
       continue;
     }
+
     http->addHeader("Range", range_header);
+
     code = http->GET();
     if (code == 200 || code == 206) {
       break;
@@ -134,7 +136,10 @@ void Nextion::upload_tft() {
   if (!begin_status) {
     this->is_updating_ = false;
     ESP_LOGD(TAG, "connection failed");
-    delete this->transfer_buffer_;
+    if (psramFound())
+      free(this->transfer_buffer_);
+    else
+      delete this->transfer_buffer_;
     return;
   } else {
     ESP_LOGD(TAG, "Connected");
@@ -222,28 +227,41 @@ void Nextion::upload_tft() {
   // Nextion wants 4096 bytes at a time. Make chunk_size a multiple of 4096
 #ifdef ARDUINO_ARCH_ESP32
   uint32_t chunk_size = 8192;
-  if (ESP.getFreeHeap() > 40960) {  // 32K to keep on hand
-    int chunk = int((ESP.getFreeHeap() - 32768) / 4096);
-    chunk_size = chunk * 4096;
-    chunk_size = chunk_size > 65536 ? 65536 : chunk_size;
-  } else if (ESP.getFreeHeap() < 10240) {
-    chunk_size = 4096;
+  if (psramFound()) {
+    chunk_size = this->content_length_ + 4096;
+  } else {
+    if (ESP.getFreeHeap() > 40960) {  // 32K to keep on hand
+      int chunk = int((ESP.getFreeHeap() - 32768) / 4096);
+      chunk_size = chunk * 4096;
+      chunk_size = chunk_size > 65536 ? 65536 : chunk_size;
+    } else if (ESP.getFreeHeap() < 10240) {
+      chunk_size = 4096;
+    }
   }
 #else
   uint32_t chunk_size = ESP.getFreeHeap() < 10240 ? 4096 : 8192;
 #endif
 
   if (this->transfer_buffer_ == nullptr) {
-    ESP_LOGD(TAG, "Allocating buffer size %d, Heap size is %u", chunk_size, ESP.getFreeHeap());
-    this->transfer_buffer_ = new uint8_t[chunk_size];
-    if (!this->transfer_buffer_) {  // Try a smaller size
-      ESP_LOGD(TAG, "Could not allocate buffer size: %d trying 4096 instead", chunk_size);
-      chunk_size = 4096;
-      ESP_LOGD(TAG, "Allocating %d buffer", chunk_size);
-      this->transfer_buffer_ = new uint8_t[chunk_size];
-
-      if (!this->transfer_buffer_)
+    if (psramFound()) {
+      ESP_LOGD(TAG, "Allocating PSRAM buffer size %d, Free PSRAM size is %u", chunk_size, ESP.getFreePsram());
+      this->transfer_buffer_ = (uint8_t *) ps_malloc(chunk_size);
+      if (this->transfer_buffer_ == nullptr) {
+        ESP_LOGE(TAG, "Could not allocate buffer size %d!", chunk_size);
         this->upload_end_();
+      }
+    } else {
+      ESP_LOGD(TAG, "Allocating buffer size %d, Heap size is %u", chunk_size, ESP.getFreeHeap());
+      this->transfer_buffer_ = new uint8_t[chunk_size];
+      if (!this->transfer_buffer_) {  // Try a smaller size
+        ESP_LOGD(TAG, "Could not allocate buffer size: %d trying 4096 instead", chunk_size);
+        chunk_size = 4096;
+        ESP_LOGD(TAG, "Allocating %d buffer", chunk_size);
+        this->transfer_buffer_ = new uint8_t[chunk_size];
+
+        if (!this->transfer_buffer_)
+          this->upload_end_();
+      }
     }
 
     this->transfer_buffer_size_ = chunk_size;
