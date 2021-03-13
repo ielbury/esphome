@@ -32,7 +32,6 @@ void Nextion::setup() {
     delay(100);                             // NOLINT
 
     this->send_command_("connect");
-    delay(250);  // NOLINT
 
     this->recv_ret_string_(response, 500, false);
     if (response.find("comok") != std::string::npos)
