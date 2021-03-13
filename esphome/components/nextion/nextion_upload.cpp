@@ -136,9 +136,11 @@ void Nextion::upload_tft() {
   if (!begin_status) {
     this->is_updating_ = false;
     ESP_LOGD(TAG, "connection failed");
+#ifdef ARDUINO_ARCH_ESP32
     if (psramFound())
       free(this->transfer_buffer_);
     else
+#endif
       delete this->transfer_buffer_;
     return;
   } else {
@@ -242,6 +244,7 @@ void Nextion::upload_tft() {
 #endif
 
   if (this->transfer_buffer_ == nullptr) {
+#ifdef ARDUINO_ARCH_ESP32
     if (psramFound()) {
       ESP_LOGD(TAG, "Allocating PSRAM buffer size %d, Free PSRAM size is %u", chunk_size, ESP.getFreePsram());
       this->transfer_buffer_ = (uint8_t *) ps_malloc(chunk_size);
@@ -250,6 +253,7 @@ void Nextion::upload_tft() {
         this->upload_end_();
       }
     } else {
+#endif
       ESP_LOGD(TAG, "Allocating buffer size %d, Heap size is %u", chunk_size, ESP.getFreeHeap());
       this->transfer_buffer_ = new uint8_t[chunk_size];
       if (!this->transfer_buffer_) {  // Try a smaller size
@@ -260,7 +264,9 @@ void Nextion::upload_tft() {
 
         if (!this->transfer_buffer_)
           this->upload_end_();
+#ifdef ARDUINO_ARCH_ESP32
       }
+#endif
     }
 
     this->transfer_buffer_size_ = chunk_size;
