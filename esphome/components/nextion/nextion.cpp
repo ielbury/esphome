@@ -91,7 +91,9 @@ void Nextion::dump_config() {
   ESP_LOGCONFIG(TAG, "  Serial Number:    %s", this->serial_number_);
   ESP_LOGCONFIG(TAG, "  Flash Size:       %s", this->flash_size_);
   ESP_LOGCONFIG(TAG, "  Wake On Touch:    %s", this->auto_wake_on_touch_ ? "True" : "False");
+#ifdef ARDUINO_ARCH_ESP32
   ESP_LOGCONFIG(TAG, "  Board Has PSRAM:  %s", YESNO(psramFound()));
+#endif
 
   if (this->touch_sleep_timeout_ != 0) {
     ESP_LOGCONFIG(TAG, "  Touch Timeout:       %d", this->touch_sleep_timeout_);
