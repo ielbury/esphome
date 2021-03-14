@@ -4,7 +4,7 @@
 #include "esphome/components/uart/uart.h"
 #include "nextion_base.h"
 #include "nextion_component.h"
-#include "esphome/components/display/display_color_utils.h"
+#include "esphome/core/color.h"
 
 #if defined(USE_ETHERNET) || defined(USE_WIFI)
 #ifdef ARDUINO_ARCH_ESP32
@@ -721,6 +721,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   void send_command_(const char *command);
   void add_no_result_to_queue_(std::string variable_name);
   void add_no_result_to_queue_with_command_(std::string variable_name, std::string command);
+
   void add_no_result_to_queue_with_printf_(std::string variable_name, const char *format, ...)
       __attribute__((format(printf, 3, 4)));
 

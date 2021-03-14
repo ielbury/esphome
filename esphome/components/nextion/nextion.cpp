@@ -32,6 +32,7 @@ void Nextion::setup() {
     delay(100);                             // NOLINT
 
     this->send_command_("connect");
+    delay(250);  // NOLINT
 
     this->recv_ret_string_(response, 500, false);
     if (response.find("comok") != std::string::npos)
@@ -67,7 +68,7 @@ void Nextion::reset_(bool reset_nextion) {
   this->ignore_is_setup_ = true;
 
   if (reset_nextion) {
-    //  this->soft_reset(); // Needs testing
+    this->soft_reset();
     delay(250);  // NOLINT
   }
 
@@ -734,25 +735,8 @@ bool Nextion::process_nextion_commands_() {
 
     this->command_data_.erase(0, to_process_length + this->command_delimiter_.length() + 1);
   }
-}
 
-void Nextion::all_components_send_state_(bool ignore_needs_update) {
-  for (auto *binarysensortype : this->binarysensortype_) {
-    if (ignore_needs_update || binarysensortype->get_needs_to_send_update())
-      binarysensortype->send_state_to_nextion();
-  }
-  for (auto *sensortype : this->sensortype_) {
-    if ((ignore_needs_update || sensortype->get_needs_to_send_update()) && sensortype->get_wave_chan_id() == 0)
-      sensortype->send_state_to_nextion();
-  }
-  for (auto *switchtype : this->switchtype_) {
-    if (ignore_needs_update || switchtype->get_needs_to_send_update())
-      switchtype->send_state_to_nextion();
-  }
-  for (auto *textsensortype : this->textsensortype_) {
-    if (ignore_needs_update || textsensortype->get_needs_to_send_update())
-      textsensortype->send_state_to_nextion();
-  }
+  return false;
 }
 
 void Nextion::set_nextion_sensor_state(int queue_type, std::string name, float state) {
@@ -1044,68 +1028,6 @@ void Nextion::add_addt_command_to_queue(NextionComponentBase *component) {
   char command[64];
   sprintf(command, "addt %d,%u,%zu", component->get_component_id(), component->get_wave_channel_id(), buffer_to_send);
 
-  this->send_command_(command);
-}
-/**
- * @brief
- *
- * @param variable_name Variable name for the queue
- * @param variable_name_to_send Variable name for the left of the command
- * @param state_value Sting value to set
- * @param is_sleep_safe The command is safe to send when the Nextion is sleeping
- */
-
-void Nextion::add_no_result_to_queue_with_set(NextionComponentBase *component, std::string state_value) {
-  this->add_no_result_to_queue_with_set(component->get_variable_name(), component->get_variable_name_to_send(),
-                                        state_value);
-}
-void Nextion::add_no_result_to_queue_with_set(std::string variable_name, std::string variable_name_to_send,
-                                              std::string state_value) {
-  this->add_no_result_to_queue_with_set_internal_(variable_name, variable_name_to_send, state_value);
-}
-
-void Nextion::add_no_result_to_queue_with_set_internal_(std::string variable_name, std::string variable_name_to_send,
-                                                        std::string state_value, bool is_sleep_safe) {
-  if ((!this->is_setup() && !this->ignore_is_setup_) || (!is_sleep_safe && this->is_sleeping()))
-    return;
-
-  this->add_no_result_to_queue_with_printf_(variable_name, "%s=\"%s\"", variable_name_to_send.c_str(),
-                                            state_value.c_str());
-}
-
-void Nextion::add_to_get_queue(NextionComponentBase *component) {
-  if ((!this->is_setup() && !this->ignore_is_setup_))
-    return;
-
-  this->nextion_queue_.push_back(component);
-
-#ifdef ESPHOME_LOG_HAS_VERY_VERBOSE
-  ESP_LOGVV(TAG, "Add to queue type: %s component %s", component->get_queue_type_string().c_str(),
-            component->get_variable_name().c_str());
-#endif
-
-  char command[64];
-  sprintf(command, "get %s", component->get_variable_name_to_send().c_str());
-  this->send_command_(command);
-}
-
-/**
- * @brief Add addt command to the queue
- *
- * @param component_id The waveform component id
- * @param wave_chan_id The waveform channel to send it to
- * @param buffer_to_send The buffer size
- * @param buffer_size The buffer data
- */
-void Nextion::add_addt_command_to_queue(NextionComponentBase *component) {
-  if ((!this->is_setup() && !this->ignore_is_setup_) || this->is_sleeping())
-    return;
-
-  this->nextion_queue_.push_back(component);
-
-  char command[64];
-  sprintf(command, "addt %d,%u,%zu", component->get_component_id(), component->get_wave_channel_id(),
-          component->get_wave_buffer_size());
   this->send_command_(command);
 }
 
