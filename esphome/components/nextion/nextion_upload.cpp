@@ -206,7 +206,8 @@ void Nextion::upload_tft() {
   };
 
   this->send_command_(command);
-  delay(250);  // NOLINT
+  // delay(250);  // NOLINT
+  App.feed_wdt();
 
   std::string response;
   ESP_LOGD(TAG, "Waiting for upgrade response");
