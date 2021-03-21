@@ -124,6 +124,7 @@ void APIConnection::loop() {
   } else if (millis() - this->last_traffic_ > keepalive) {
     this->sent_ping_ = true;
     this->send_ping_request(PingRequest());
+    ESP_LOGD(TAG, "'%s' sent Ping...", this->client_info_.c_str());
   }
 
 #ifdef USE_ESP32_CAMERA
@@ -142,6 +143,8 @@ void APIConnection::loop() {
       buffer.encode_bool(3, done);
       bool success = this->send_buffer(buffer, 44);
 
+      yield();
+
       if (success) {
         this->image_reader_.consume_data(to_send);
       }
@@ -151,7 +154,7 @@ void APIConnection::loop() {
     }
   }
 #endif
-}
+}  // namespace api
 
 std::string get_default_unique_id(const std::string &component_type, Nameable *nameable) {
   return App.get_name() + component_type + nameable->get_object_id();
@@ -166,7 +169,11 @@ bool APIConnection::send_binary_sensor_state(binary_sensor::BinarySensor *binary
   resp.key = binary_sensor->get_object_id_hash();
   resp.state = state;
   resp.missing_state = !binary_sensor->has_state();
-  return this->send_binary_sensor_state_response(resp);
+  bool send_status = this->send_binary_sensor_state_response(resp);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 bool APIConnection::send_binary_sensor_info(binary_sensor::BinarySensor *binary_sensor) {
   ListEntitiesBinarySensorResponse msg;
@@ -176,7 +183,11 @@ bool APIConnection::send_binary_sensor_info(binary_sensor::BinarySensor *binary_
   msg.unique_id = get_default_unique_id("binary_sensor", binary_sensor);
   msg.device_class = binary_sensor->get_device_class();
   msg.is_status_binary_sensor = binary_sensor->is_status_binary_sensor();
-  return this->send_list_entities_binary_sensor_response(msg);
+  bool send_status = this->send_list_entities_binary_sensor_response(msg);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 #endif
 
@@ -194,7 +205,11 @@ bool APIConnection::send_cover_state(cover::Cover *cover) {
   if (traits.get_supports_tilt())
     resp.tilt = cover->tilt;
   resp.current_operation = static_cast<enums::CoverOperation>(cover->current_operation);
-  return this->send_cover_state_response(resp);
+  bool send_status = this->send_cover_state_response(resp);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 bool APIConnection::send_cover_info(cover::Cover *cover) {
   auto traits = cover->get_traits();
@@ -255,7 +270,11 @@ bool APIConnection::send_fan_state(fan::FanState *fan) {
   }
   if (traits.supports_direction())
     resp.direction = static_cast<enums::FanDirection>(fan->direction);
-  return this->send_fan_state_response(resp);
+  bool send_status = this->send_fan_state_response(resp);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 bool APIConnection::send_fan_info(fan::FanState *fan) {
   auto traits = fan->get_traits();
@@ -268,7 +287,11 @@ bool APIConnection::send_fan_info(fan::FanState *fan) {
   msg.supports_speed = traits.supports_speed();
   msg.supports_direction = traits.supports_direction();
   msg.supported_speed_count = traits.supported_speed_count();
-  return this->send_list_entities_fan_response(msg);
+  bool send_status = this->send_list_entities_fan_response(msg);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 void APIConnection::fan_command(const FanCommandRequest &msg) {
   fan::FanState *fan = App.get_fan_by_key(msg.key);
@@ -318,7 +341,11 @@ bool APIConnection::send_light_state(light::LightState *light) {
     resp.color_temperature = values.get_color_temperature();
   if (light->supports_effects())
     resp.effect = light->get_effect_name();
-  return this->send_light_state_response(resp);
+  bool send_status = this->send_light_state_response(resp);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 bool APIConnection::send_light_info(light::LightState *light) {
   auto traits = light->get_traits();
@@ -340,7 +367,11 @@ bool APIConnection::send_light_info(light::LightState *light) {
     for (auto *effect : light->get_effects())
       msg.effects.push_back(effect->get_name());
   }
-  return this->send_list_entities_light_response(msg);
+  bool send_status = this->send_list_entities_light_response(msg);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 void APIConnection::light_command(const LightCommandRequest &msg) {
   light::LightState *light = App.get_light_by_key(msg.key);
@@ -380,7 +411,11 @@ bool APIConnection::send_sensor_state(sensor::Sensor *sensor, float state) {
   resp.key = sensor->get_object_id_hash();
   resp.state = state;
   resp.missing_state = !sensor->has_state();
-  return this->send_sensor_state_response(resp);
+  bool send_status = this->send_sensor_state_response(resp);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 bool APIConnection::send_sensor_info(sensor::Sensor *sensor) {
   ListEntitiesSensorResponse msg;
@@ -395,7 +430,11 @@ bool APIConnection::send_sensor_info(sensor::Sensor *sensor) {
   msg.accuracy_decimals = sensor->get_accuracy_decimals();
   msg.force_update = sensor->get_force_update();
   msg.device_class = sensor->get_device_class();
-  return this->send_list_entities_sensor_response(msg);
+  bool send_status = this->send_list_entities_sensor_response(msg);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 #endif
 
@@ -407,7 +446,11 @@ bool APIConnection::send_switch_state(switch_::Switch *a_switch, bool state) {
   SwitchStateResponse resp{};
   resp.key = a_switch->get_object_id_hash();
   resp.state = state;
-  return this->send_switch_state_response(resp);
+  bool send_status = this->send_switch_state_response(resp);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 bool APIConnection::send_switch_info(switch_::Switch *a_switch) {
   ListEntitiesSwitchResponse msg;
@@ -417,7 +460,11 @@ bool APIConnection::send_switch_info(switch_::Switch *a_switch) {
   msg.unique_id = get_default_unique_id("switch", a_switch);
   msg.icon = a_switch->get_icon();
   msg.assumed_state = a_switch->assumed_state();
-  return this->send_list_entities_switch_response(msg);
+  bool send_status = this->send_list_entities_switch_response(msg);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 void APIConnection::switch_command(const SwitchCommandRequest &msg) {
   switch_::Switch *a_switch = App.get_switch_by_key(msg.key);
@@ -440,7 +487,11 @@ bool APIConnection::send_text_sensor_state(text_sensor::TextSensor *text_sensor,
   resp.key = text_sensor->get_object_id_hash();
   resp.state = std::move(state);
   resp.missing_state = !text_sensor->has_state();
-  return this->send_text_sensor_state_response(resp);
+  bool send_status = this->send_text_sensor_state_response(resp);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 bool APIConnection::send_text_sensor_info(text_sensor::TextSensor *text_sensor) {
   ListEntitiesTextSensorResponse msg;
@@ -451,7 +502,11 @@ bool APIConnection::send_text_sensor_info(text_sensor::TextSensor *text_sensor) 
   if (msg.unique_id.empty())
     msg.unique_id = get_default_unique_id("text_sensor", text_sensor);
   msg.icon = text_sensor->get_icon();
-  return this->send_list_entities_text_sensor_response(msg);
+  bool send_status = this->send_list_entities_text_sensor_response(msg);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 #endif
 
@@ -479,7 +534,11 @@ bool APIConnection::send_climate_state(climate::Climate *climate) {
     resp.fan_mode = static_cast<enums::ClimateFanMode>(climate->fan_mode);
   if (traits.get_supports_swing_modes())
     resp.swing_mode = static_cast<enums::ClimateSwingMode>(climate->swing_mode);
-  return this->send_climate_state_response(resp);
+  bool send_status = this->send_climate_state_response(resp);
+  if (send_status) {
+    this->last_traffic_ = millis();
+  }
+  return send_status;
 }
 bool APIConnection::send_climate_info(climate::Climate *climate) {
   auto traits = climate->get_traits();
