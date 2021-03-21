@@ -1,7 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import i2c, sensor
-from esphome.const import CONF_ID, UNIT_METER, ICON_ARROW_EXPAND_VERTICAL
+from esphome.const import CONF_ID, UNIT_METER, ICON_ARROW_EXPAND_VERTICAL, DEVICE_CLASS_EMPTY
 from esphome.core import TimePeriod
 
 DEPENDENCIES = ['i2c']
@@ -20,7 +20,7 @@ CONF_DISTANCE_MODE = "distance_mode"
 CONF_TIMING_BUDGET = 'timing_budget'
 CONF_RETRY_BUDGET = 'retry_budget'
 
-CONFIG_SCHEMA = sensor.sensor_schema(UNIT_METER, ICON_ARROW_EXPAND_VERTICAL, 2).extend({
+CONFIG_SCHEMA = sensor.sensor_schema(UNIT_METER, ICON_ARROW_EXPAND_VERTICAL, 2, DEVICE_CLASS_EMPTY).extend({
     cv.GenerateID(): cv.declare_id(VL53L1XSensor),
     cv.Optional(CONF_DISTANCE_MODE, default="LONG"): cv.enum(vl53l1x_distance_modes, upper=True),
     cv.Optional(CONF_TIMING_BUDGET, default='50ms'):
