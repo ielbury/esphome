@@ -19,6 +19,9 @@ namespace nextion {
 #else
 #define ESP_LOGN(tag, ...) esph_log_d(tag, __VA_ARGS__)
 #endif
+#else
+#define ESP_LOGN(tag, ...) \
+  {}
 #endif
 
 class NextionBase;
