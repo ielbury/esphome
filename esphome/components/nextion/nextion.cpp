@@ -30,20 +30,27 @@ bool Nextion::check_connect_() {
   this->ignore_is_setup_ = true;
   std::string response;
 
+  this->reset_(false);
   this->send_command_("boguscommand=0");  // bogus command. needed sometimes after updating
   this->send_command_("connect");
 
   this->recv_ret_string_(response, 500, false);
   if (response.find("comok") == std::string::npos) {
-    ESP_LOGD(TAG, "bad connect request %s", response.c_str());
-    this->reset_(false);
+    ESP_LOGN(TAG, "bad connect request %s", response.c_str());
     this->ignore_is_setup_ = false;
+    ESP_LOGW(TAG, "Nextion is not connected! ");
     return false;
   }
+
+  ESP_LOGI(TAG, "Nextion is connected");
 
   this->set_is_connected_(true);
 
   ESP_LOGN(TAG, "connect request %s", response.c_str());
+  // for (int i = 0; i < response.length(); i++) {
+  //   ESP_LOGD(TAG, "response %s %d %d %c", response.c_str(), i, response[i], response[i]);
+  // }
+
   sscanf(response.c_str(), "%*64[^,],%*64[^,],%64[^,],%64[^,],%*64[^,],%64[^,],%64[^,]", device_model_,
          firmware_version_, serial_number_, flash_size_);
 
@@ -59,7 +66,10 @@ bool Nextion::check_connect_() {
   if (this->wake_up_page_ != -1) {
     this->set_wake_up_page(this->wake_up_page_);
   }
+
   this->ignore_is_setup_ = false;
+  this->dump_config();
+  // this->reset_(false);
   return true;
 }
 
@@ -83,6 +93,10 @@ void Nextion::reset_(bool reset_nextion) {
 }
 
 void Nextion::dump_config() {
+  if (!this->get_is_connected_() || this->dump_ran_)
+    return;
+  this->dump_ran_ = true;
+
   ESP_LOGCONFIG(TAG, "Nextion:");
   ESP_LOGCONFIG(TAG, "  Baud Rate:        %d", this->parent_->get_baud_rate());
   ESP_LOGCONFIG(TAG, "  Device Model:     %s", this->device_model_);
@@ -201,10 +215,10 @@ bool Nextion::process_nextion_commands_() {
     this->command_data_ += d;
   }
 
-  App.feed_wdt();
-
   size_t to_process_length = 0;
   std::string to_process;
+
+  // ESP_LOGN(TAG, "this->command_data_ %s length %d", this->command_data_.c_str(), this->command_data_.length());
 
   while ((to_process_length = this->command_data_.find(this->command_delimiter_)) != std::string::npos) {
 #ifdef NEXTION_PROTOCOL_LOG
@@ -529,12 +543,12 @@ bool Nextion::process_nextion_commands_() {
         uint8_t index = 0;
 
         // Get variable name
-        if (to_process.find('\0') == std::string::npos || (to_process_length - index - 1) < 1) {
+        index = to_process.find('\0');
+        if (index == std::string::npos || (to_process_length - index - 1) < 1) {
           ESP_LOGE(TAG, "Bad switch component data received for 0x90 event!");
+          ESP_LOGN(TAG, "to_process %s %d %d", to_process.c_str(), to_process_length, index);
           break;
         }
-
-        index = to_process.find('\0');
 
         variable_name = to_process.substr(0, index);
         ++index;
@@ -556,8 +570,10 @@ bool Nextion::process_nextion_commands_() {
         std::string variable_name;
         uint8_t index = 0;
 
-        if (to_process.find('\0') == std::string::npos || (to_process_length - index - 1) != 4) {
+        index = to_process.find('\0');
+        if (index == std::string::npos || (to_process_length - index - 1) != 4) {
           ESP_LOGE(TAG, "Bad sensor component data received for 0x91 event!");
+          ESP_LOGN(TAG, "to_process %s %d %d", to_process.c_str(), to_process_length, index);
           break;
         }
 
@@ -589,11 +605,13 @@ bool Nextion::process_nextion_commands_() {
         uint8_t index = 0;
 
         // Get variable name
-        if (to_process.find('\0') == std::string::npos || (to_process_length - index - 1) < 1) {
+        index = to_process.find('\0');
+        if (index == std::string::npos || (to_process_length - index - 1) < 1) {
           ESP_LOGE(TAG, "Bad text sensor component data received for 0x92 event!");
+          ESP_LOGN(TAG, "to_process %s %d %d", to_process.c_str(), to_process_length, index);
           break;
         }
-        index = to_process.find('\0');
+
         variable_name = to_process.substr(0, index);
         ++index;
 
@@ -617,13 +635,14 @@ bool Nextion::process_nextion_commands_() {
         uint8_t index = 0;
 
         // Get variable name
-        if (to_process.find('\0') == std::string::npos || (to_process_length - index - 1) < 1) {
+        index = to_process.find('\0');
+        if (index == std::string::npos || (to_process_length - index - 1) < 1) {
           ESP_LOGE(TAG, "Bad binary sensor component data received for 0x92 event!");
+          ESP_LOGN(TAG, "to_process %s %d %d", to_process.c_str(), to_process_length, index);
           break;
         }
-        index = to_process.find('\0');
-        variable_name = to_process.substr(0, index);
 
+        variable_name = to_process.substr(0, index);
         ++index;
 
         ESP_LOGN(TAG, "Got Binary Sensor variable_name=%s value=%d", variable_name.c_str(), to_process[index] != 0);
@@ -679,6 +698,7 @@ bool Nextion::process_nextion_commands_() {
     ESP_LOGN(TAG, "nextion loop end");
 
     this->command_data_.erase(0, to_process_length + this->command_delimiter_.length() + 1);
+    App.feed_wdt();
   }
 
   return false;
@@ -815,9 +835,16 @@ uint16_t Nextion::recv_ret_string_(std::string &response, uint32_t timeout, bool
       App.feed_wdt();
       delay(1);
     }
+
     if (exit_flag || ff_flag) {
       break;
     }
+  }
+
+  if (exit_flag || ff_flag) {
+    ESP_LOGD(TAG, "Flag set");
+  } else {
+    ESP_LOGD(TAG, "Flag NOT set");
   }
 
   if (ff_flag)
