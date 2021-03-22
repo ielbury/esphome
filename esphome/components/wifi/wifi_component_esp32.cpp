@@ -464,6 +464,7 @@ void WiFiComponent::wifi_event_callback_(system_event_id_t event, system_event_i
 }
 void WiFiComponent::wifi_pre_setup_() {
   auto f = std::bind(&WiFiComponent::wifi_event_callback_, this, std::placeholders::_1, std::placeholders::_2);
+  WiFi.disconnect();
   WiFi.onEvent(f);
   WiFi.persistent(false);
   // Make sure WiFi is in clean state before anything starts
