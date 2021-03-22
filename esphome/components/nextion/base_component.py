@@ -30,16 +30,18 @@ CONF_VISIBLE = "visible"
 
 def NextionName(value):
     valid_chars = ascii_letters + digits + "."
+    if not isinstance(value, str) or len(value) > 29:
+        raise cv.Invalid("Must be a string less than 29 characters")
+
     for char in value:
         if char not in valid_chars:
             raise cv.Invalid(
                 "Must only consist of upper/lowercase characters, the period '.'"
-                "character and numbers. The character '{}' cannot be used"
+                "character and numbers. The character '{}' cannot be used."
                 "".format(char)
             )
-    if isinstance(value, str) and len(value) <= 29:
-        return value
-    raise cv.Invalid("Must be less than 29 characters")
+
+    return value
 
 
 CONFIG_BASE_COMPONENT_SCHEMA = cv.Schema(

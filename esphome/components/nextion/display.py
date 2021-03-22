@@ -87,6 +87,7 @@ def to_code(config):
     for conf in config.get(CONF_ON_SLEEP, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
         yield automation.build_automation(trigger, [], conf)
+
     for conf in config.get(CONF_ON_WAKE, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
         yield automation.build_automation(trigger, [], conf)
