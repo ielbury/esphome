@@ -620,12 +620,6 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   //  */
   bool send_command_printf(const char *format, ...) __attribute__((format(printf, 2, 3)));
 
-  /**
-   * Manually send a raw command to the display and don't wait for an acknowledgement packet.
-   * @param command The command to write, for example "vis b0,0".
-   */
-  void send_command_no_ack(const char *command);
-
 #ifdef USE_TFT_UPLOAD
   /**
    * Set the tft file URL. https seems problamtic with arduino..
@@ -649,13 +643,13 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    *
    * @param callback The void(bool) callback.
    */
-  void add_sleep_state_callback(std::function<void(bool)> &&callback);
+  void add_sleep_state_callback(std::function<void()> &&callback);
 
   /** Add a callback to be notified of wake state changes.
    *
    * @param callback The void(bool) callback.
    */
-  void add_wake_state_callback(std::function<void(bool)> &&callback);
+  void add_wake_state_callback(std::function<void()> &&callback);
 
   void update_all_components();
 
@@ -718,11 +712,11 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * Manually send a raw command to the display and don't wait for an acknowledgement packet.
    * @param command The command to write, for example "vis b0,0".
    */
-  void send_command_(const char *command);
+  bool send_command_(const char *command);
   void add_no_result_to_queue_(std::string variable_name);
   void add_no_result_to_queue_with_command_(std::string variable_name, std::string command);
 
-  void add_no_result_to_queue_with_printf_(std::string variable_name, const char *format, ...)
+  bool add_no_result_to_queue_with_printf_(std::string variable_name, const char *format, ...)
       __attribute__((format(printf, 3, 4)));
 
   void add_no_result_to_queue_with_set_internal_(std::string variable_name, std::string variable_name_to_send,
@@ -771,6 +765,11 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    */
   bool upload_from_buffer_(const uint8_t *file_buf, size_t buf_size);
   void upload_end_();
+
+  bool check_connect_();
+  void set_is_connected_(bool is_connected) { this->is_connected_ = is_connected; }
+  bool get_is_connected_() { return this->is_connected_; }
+
 #endif
 
 #endif
@@ -780,8 +779,8 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   std::vector<NextionComponentBase *> sensortype_;
   std::vector<NextionComponentBase *> textsensortype_;
   std::vector<NextionComponentBase *> binarysensortype_;
-  CallbackManager<void(bool)> sleep_callback_{};
-  CallbackManager<void(bool)> wake_callback_{};
+  CallbackManager<void()> sleep_callback_{};
+  CallbackManager<void()> wake_callback_{};
 
   optional<nextion_writer_t> writer_;
   float brightness_{1.0};
@@ -807,6 +806,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
 
   std::string command_data_;
   std::string command_delimiter_;
+  bool is_connected_ = false;
 };
 }  // namespace nextion
 }  // namespace esphome

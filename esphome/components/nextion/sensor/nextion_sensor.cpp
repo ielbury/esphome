@@ -87,9 +87,7 @@ void NextionSensor::set_state(float state, bool publish, bool send_to_nextion) {
   }
   this->update_component_settings();
 
-#ifdef NEXTION_PROTOCOL_LOG
   ESP_LOGN(TAG, "Wrote state for sensor \"%s\" state %lf", this->variable_name_.c_str(), state);
-#endif
 }
 
 void NextionSensor::wave_update_() {

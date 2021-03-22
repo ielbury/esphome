@@ -17,8 +17,8 @@ class NextionBinarySensor : public NextionComponent,
   void update_component() override { this->update(); }
   void update() override;
   void send_state_to_nextion() override { this->set_state(this->state, false); };
-  void process_bool(std::string variable_name, bool on) override;
-  void process_touch(uint8_t page_id, uint8_t component_id, bool on) override;
+  void process_bool(std::string variable_name, bool state) override;
+  void process_touch(uint8_t page_id, uint8_t component_id, bool state) override;
 
   // Set the components page id for Nextion Touch Component
   void set_page_id(uint8_t page_id) { page_id_ = page_id; }
