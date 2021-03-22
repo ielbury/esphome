@@ -807,6 +807,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   std::string command_data_;
   std::string command_delimiter_;
   bool is_connected_ = false;
+  bool dump_ran_ = false;
 };
 }  // namespace nextion
 }  // namespace esphome
