@@ -14,7 +14,14 @@ static const char *TAG = "nextion_upload";
 // https://unofficialnextion.com/t/nextion-upload-protocol-v1-2-the-fast-one/1044/2
 
 int Nextion::upload_by_chunks_(HTTPClient *http, int range_start) {
-  int range_end = range_start + this->transfer_buffer_size_ - 1;
+  int range_end = 0;
+
+  if (range_start == 0 && this->transfer_buffer_size_ > 16384) {  // Start small at the first run in case of a big skip
+    range_end = 16384;
+  } else {
+    range_end = range_start + this->transfer_buffer_size_ - 1;
+  }
+
   if (range_end > this->tft_size_)
     range_end = this->tft_size_;
 
@@ -206,7 +213,7 @@ void Nextion::upload_tft() {
   };
 
   this->send_command_(command);
-  // delay(250);  // NOLINT
+
   App.feed_wdt();
 
   std::string response;
