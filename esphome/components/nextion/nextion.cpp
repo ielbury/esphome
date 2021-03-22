@@ -544,7 +544,7 @@ bool Nextion::process_nextion_commands_() {
 
         // Get variable name
         index = to_process.find('\0');
-        if (index == std::string::npos || (to_process_length - index - 1) < 1) {
+        if (static_cast<char>(index) == std::string::npos || (to_process_length - index - 1) < 1) {
           ESP_LOGE(TAG, "Bad switch component data received for 0x90 event!");
           ESP_LOGN(TAG, "to_process %s %d %d", to_process.c_str(), to_process_length, index);
           break;
@@ -571,7 +571,7 @@ bool Nextion::process_nextion_commands_() {
         uint8_t index = 0;
 
         index = to_process.find('\0');
-        if (index == std::string::npos || (to_process_length - index - 1) != 4) {
+        if (static_cast<char>(index) == std::string::npos || (to_process_length - index - 1) != 4) {
           ESP_LOGE(TAG, "Bad sensor component data received for 0x91 event!");
           ESP_LOGN(TAG, "to_process %s %d %d", to_process.c_str(), to_process_length, index);
           break;
@@ -606,7 +606,7 @@ bool Nextion::process_nextion_commands_() {
 
         // Get variable name
         index = to_process.find('\0');
-        if (index == std::string::npos || (to_process_length - index - 1) < 1) {
+        if (static_cast<char>(index) == std::string::npos || (to_process_length - index - 1) < 1) {
           ESP_LOGE(TAG, "Bad text sensor component data received for 0x92 event!");
           ESP_LOGN(TAG, "to_process %s %d %d", to_process.c_str(), to_process_length, index);
           break;
@@ -636,7 +636,7 @@ bool Nextion::process_nextion_commands_() {
 
         // Get variable name
         index = to_process.find('\0');
-        if (index == std::string::npos || (to_process_length - index - 1) < 1) {
+        if (static_cast<char>(index) == std::string::npos || (to_process_length - index - 1) < 1) {
           ESP_LOGE(TAG, "Bad binary sensor component data received for 0x92 event!");
           ESP_LOGN(TAG, "to_process %s %d %d", to_process.c_str(), to_process_length, index);
           break;
