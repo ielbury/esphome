@@ -8,20 +8,14 @@ namespace nextion {
 class SleepTrigger : public Trigger<> {
  public:
   explicit SleepTrigger(Nextion *nextion) {
-    nextion->add_sleep_state_callback([this](bool state) {
-      if (state)
-        this->trigger();
-    });
+    nextion->add_sleep_state_callback([this]() { this->trigger(); });
   }
 };
 
 class WakeTrigger : public Trigger<> {
  public:
   explicit WakeTrigger(Nextion *nextion) {
-    nextion->add_wake_state_callback([this](bool state) {
-      if (state)
-        this->trigger();
-    });
+    nextion->add_wake_state_callback([this]() { this->trigger(); });
   }
 };
 
