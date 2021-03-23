@@ -38,7 +38,7 @@ bool Nextion::check_connect_() {
   if (response.find("comok") == std::string::npos) {
     ESP_LOGN(TAG, "bad connect request %s", response.c_str());
     this->ignore_is_setup_ = false;
-    ESP_LOGW(TAG, "Nextion is not connected! ");
+    // ESP_LOGW(TAG, "Nextion is not connected! ");
     return false;
   }
 
@@ -841,11 +841,11 @@ uint16_t Nextion::recv_ret_string_(std::string &response, uint32_t timeout, bool
     }
   }
 
-  if (exit_flag || ff_flag) {
-    ESP_LOGD(TAG, "Flag set");
-  } else {
-    ESP_LOGD(TAG, "Flag NOT set");
-  }
+  // if (exit_flag || ff_flag) {
+  //   ESP_LOGD(TAG, "Flag set");
+  // } else {
+  //   ESP_LOGD(TAG, "Flag NOT set");
+  // }
 
   if (ff_flag)
     response = response.substr(0, response.length() - 3);  // Remove last 3 0xFF
