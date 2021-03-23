@@ -534,6 +534,7 @@ bool WiFiComponent::wifi_sta_pre_setup_() {
 }
 
 void WiFiComponent::wifi_pre_setup_() {
+  WiFi.disconnect();
   wifi_set_event_handler_cb(&WiFiComponent::wifi_event_callback);
 
   // Make sure WiFi is in clean state before anything starts
