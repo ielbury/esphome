@@ -242,7 +242,7 @@ bool Nextion::process_nextion_commands_() {
         break;
       case 0x01:  // instruction sent by user was successful
 
-        ESP_LOGN(TAG, "instruction sent by user was successful");
+        ESP_LOGVV(TAG, "instruction sent by user was successful");
         ESP_LOGN(TAG, "this->nextion_queue_.empty() %s", this->nextion_queue_.empty() ? "True" : "False");
 
         if (!this->nextion_queue_.empty() &&
@@ -261,7 +261,7 @@ bool Nextion::process_nextion_commands_() {
             }
           }
         } else {
-          ESP_LOGE(TAG, "Queue is empty!");
+          ESP_LOGE(TAG, "Queue is empty!");  // Maybe make VV or N
         }
 
         break;
@@ -475,19 +475,10 @@ bool Nextion::process_nextion_commands_() {
 
         int value = 0;
 
-        ESP_LOGD(TAG, "to_process_length  %zu", to_process_length);
         for (int i = 0; i < 4; ++i) {
           value += to_process[i] << (8 * i);
           ++dataindex;
         }
-
-        // // if the length is < 4 than its a negative. 2s complement conversion is needed and
-        // // fill in any missing bytes and then flip the bits
-        // if (dataindex < 4) {
-        //   for (int i = dataindex; i < 4; ++i) {
-        //     value += 255 << (8 * i);
-        //   }
-        // }
 
         auto nextion_queue = this->nextion_queue_.front();
 
@@ -511,14 +502,14 @@ bool Nextion::process_nextion_commands_() {
       }
 
       case 0x86: {  // device automatically enters into sleep mode
-        ESP_LOGD(TAG, "Received Nextion entering sleep automatically");
+        ESP_LOGVV(TAG, "Received Nextion entering sleep automatically");
         this->sleep_callback_.call();
         this->set_is_sleeping_(true);
         break;
       }
       case 0x87:  // device automatically wakes up
       {
-        ESP_LOGD(TAG, "Received Nextion leaves sleep automatically");
+        ESP_LOGVV(TAG, "Received Nextion leaves sleep automatically");
         this->wake_callback_.call();
         this->set_is_sleeping_(false);
         this->all_components_send_state_();
@@ -653,11 +644,11 @@ bool Nextion::process_nextion_commands_() {
         break;
       }
       case 0xFD: {  // data transparent transmit finished
-        ESP_LOGD(TAG, "Nextion reported data transmit finished!");
+        ESP_LOGVV(TAG, "Nextion reported data transmit finished!");
         break;
       }
       case 0xFE: {  // data transparent transmit ready
-        ESP_LOGD(TAG, "Nextion reported ready for transmit!");
+        ESP_LOGVV(TAG, "Nextion reported ready for transmit!");
 
         int index = 0;
         int found = -1;
