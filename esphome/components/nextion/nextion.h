@@ -172,6 +172,34 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * colors.
    */
   void set_component_pressed_background_color(const char *component, Color color) override;
+
+  /**
+   * Set the picture id of a component.
+   * @param component The component name.
+   * @param pic_id The picture ID.
+   *
+   * Example:
+   * ```cpp
+   * it.set_component_pic("textview", 1);
+   * ```
+   *
+   * This will change the picture id of the component `textview`.
+   */
+  void set_component_pic(const char *component, uint8_t pic_id);
+  /**
+   * Set the background picture id of component.
+   * @param component The component name.
+   * @param pic_id The picture ID.
+   *
+   * Example:
+   * ```cpp
+   * it.set_component_picc("textview", 1);
+   * ```
+   *
+   * This will change the background picture id of the component `textview`.
+   */
+  void set_component_picc(const char *component, uint8_t pic_id);
+
   /**
    * Set the font color of a component.
    * @param component The component name.

@@ -53,6 +53,12 @@ void Nextion::set_component_pressed_background_color(const char *component, Colo
   this->add_no_result_to_queue_with_printf_("set_component_pressed_background_color", "%s.bco2=%d", component,
                                             display::ColorUtil::color_to_565(color));
 }
+void Nextion::set_component_pic(const char *component, uint8_t pic_id) {
+  this->add_no_result_to_queue_with_printf_("set_component_pic", "%s.pic=%d", component, pic_id);
+}
+void Nextion::set_component_picc(const char *component, uint8_t pic_id) {
+  this->add_no_result_to_queue_with_printf_("set_component_pic", "%s.picc=%d", component, pic_id);
+}
 void Nextion::set_component_font_color(const char *component, uint32_t color) {
   this->add_no_result_to_queue_with_printf_("set_component_font_color", "%s.pco=%d", component, color);
 }
@@ -97,7 +103,6 @@ void Nextion::set_auto_wake_on_touch(bool auto_wake) {
 }
 
 // General Component
-
 void Nextion::set_component_font(const char *component, uint8_t font_id) {
   this->add_no_result_to_queue_with_printf_("set_component_font", "%s.font=%d", component, font_id);
 }
