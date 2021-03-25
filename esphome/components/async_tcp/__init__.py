@@ -8,8 +8,9 @@ CODEOWNERS = ["@OttoWinter"]
 @coroutine_with_priority(200.0)
 def to_code(config):
     if CORE.is_esp32:
+        # https://github.com/ielbury/AsyncTCP.git#master
         # https://github.com/OttoWinter/AsyncTCP/blob/master/library.json
-        cg.add_library("AsyncTCP-esphome", "1.1.1")
+        cg.add_library("https://github.com/ielbury/AsyncTCP.git#master", "1.1.1")
     elif CORE.is_esp8266:
         # https://github.com/OttoWinter/ESPAsyncTCP
-        cg.add_library("https://github.com/ielbury/AsyncTCP.git#master", "1.2.3")
+        cg.add_library("https://github.com/OttoWinter/ESPAsyncTCP", "1.2.3")
