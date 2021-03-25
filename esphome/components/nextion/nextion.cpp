@@ -22,8 +22,7 @@ void Nextion::setup() {
 
   this->ignore_is_setup_ = false;
 
-  if (!this->check_connect_() || this->is_updating_)
-    return;
+  this->check_connect_();
 }
 
 bool Nextion::check_connect_() {
