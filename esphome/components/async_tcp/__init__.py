@@ -12,4 +12,4 @@ def to_code(config):
         cg.add_library("AsyncTCP-esphome", "1.1.1")
     elif CORE.is_esp8266:
         # https://github.com/OttoWinter/ESPAsyncTCP
-        cg.add_library("ESPAsyncTCP-esphome", "1.2.3")
+        cg.add_library("https://github.com/ielbury/AsyncTCP.git#master", "1.2.3")
