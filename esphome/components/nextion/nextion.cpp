@@ -21,6 +21,9 @@ void Nextion::setup() {
   this->send_command_("sleep=0");
 
   this->ignore_is_setup_ = false;
+
+  if (!this->check_connect_() || this->is_updating_)
+    return;
 }
 
 bool Nextion::check_connect_() {
@@ -199,12 +202,7 @@ void Nextion::print_queue_members_() {
 }
 #endif
 
-void Nextion::loop() {
-  if (!this->check_connect_() || this->is_updating_)
-    return;
-
-  this->process_nextion_commands_();
-}
+void Nextion::loop() { this->process_nextion_commands_(); }
 
 // nextion.tech/instruction-set/
 bool Nextion::process_nextion_commands_() {
