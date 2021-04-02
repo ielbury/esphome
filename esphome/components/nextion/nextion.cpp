@@ -200,10 +200,8 @@ void Nextion::print_queue_members_() {
 #endif
 
 void Nextion::loop() {
-  if (!this->check_connect_() || this->is_updating_) {
-    delay(250);
+  if (!this->check_connect_() || this->is_updating_)
     return;
-  }
 
   this->process_nextion_commands_();
 }
