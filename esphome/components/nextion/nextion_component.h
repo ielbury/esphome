@@ -2,9 +2,7 @@
 #include "esphome/core/defines.h"
 #include "esphome/core/color.h"
 #include "nextion_base.h"
-#ifdef USE_API
-#include "esphome/components/api/api_server.h"
-#endif
+
 namespace esphome {
 namespace nextion {
 class NextionComponent;
@@ -13,7 +11,7 @@ class NextionComponent : public NextionComponentBase {
  public:
   void update_component_settings() override { this->update_component_settings(false); };
 
-  void update_component_settings(bool ignore_needs_update) override;
+  void update_component_settings(bool force_update) override;
 
   void set_background_color(Color bco);
   void set_background_pressed_color(Color bco2);

@@ -26,8 +26,6 @@ from ..base_component import (
 
 CODEOWNERS = ["@senexcrenshaw"]
 
-DEPENDENCIES = ["display"]
-
 NextionSensor = nextion_ns.class_("NextionSensor", sensor.Sensor, cg.PollingComponent)
 
 CONFIG_SCHEMA = cv.All(

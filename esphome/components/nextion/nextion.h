@@ -1,5 +1,6 @@
 #pragma once
 
+#include <deque>
 #include "esphome/core/defines.h"
 #include "esphome/components/uart/uart.h"
 #include "nextion_base.h"
@@ -27,6 +28,8 @@ class Nextion;
 class NextionComponentBase;
 
 using nextion_writer_t = std::function<void(Nextion &)>;
+
+static const std::string COMMAND_DELIMITER{static_cast<char>(255), static_cast<char>(255), static_cast<char>(255)};
 
 class Nextion : public NextionBase, public PollingComponent, public uart::UARTDevice {
  public:
@@ -92,7 +95,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    *
    * Example:
    * ```cpp
-   * it.set_component_background_color("button", FF0000);
+   * it.set_component_background_color("button", 0xFF0000);
    * ```
    *
    * This will change the background color of the component `button` to red.
@@ -133,7 +136,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    *
    * Example:
    * ```cpp
-   * it.set_component_pressed_background_color("button", FF0000 );
+   * it.set_component_pressed_background_color("button", 0xFF0000 );
    * ```
    *
    * This will change the pressed background color of the component `button` to red. This is the background color that
@@ -207,7 +210,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    *
    * Example:
    * ```cpp
-   * it.set_component_font_color("textview", FF0000);
+   * it.set_component_font_color("textview", 0xFF0000);
    * ```
    *
    * This will change the font color of the component `textview` to a red color.
@@ -250,7 +253,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    *
    * Example:
    * ```cpp
-   * it.set_component_pressed_font_color("button", FF0000);
+   * it.set_component_pressed_font_color("button", 0xFF0000);
    * ```
    *
    * This will change the pressed font color of the component `button` to a red.
@@ -638,6 +641,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   void loop() override;
   void set_writer(const nextion_writer_t &writer);
 
+  // This function has been depreciated
   void set_wait_for_ack(bool wait_for_ack);
 
   // /**
@@ -681,12 +685,6 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
 
   void update_all_components();
 
-  void set_touch_sleep_timeout_internal(uint32_t touch_sleep_timeout) {
-    this->touch_sleep_timeout_ = touch_sleep_timeout;
-  }
-  void set_wake_up_page_internal(uint8_t wake_up_page) { this->wake_up_page_ = wake_up_page; }
-  void set_auto_wake_on_touch_internal(bool auto_wake_on_touch) { this->auto_wake_on_touch_ = auto_wake_on_touch; }
-
   /**
    * @brief Set the nextion sensor state object.
    *
@@ -699,29 +697,35 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * @param[in] state
    * State to set.
    */
-  void set_nextion_sensor_state(int queue_type, std::string name, float state);
-  void set_nextion_sensor_state(NextionQueueType queue_type, std::string name, float state);
-  void set_nextion_text_state(std::string name, std::string state);
+  void set_nextion_sensor_state(int queue_type, const std::string &name, float state);
+  void set_nextion_sensor_state(NextionQueueType queue_type, const std::string &name, float state);
+  void set_nextion_text_state(const std::string &name, const std::string &state);
 
   void add_no_result_to_queue_with_set(NextionComponentBase *component, int state_value) override;
-  void add_no_result_to_queue_with_set(std::string variable_name, std::string variable_name_to_send,
+  void add_no_result_to_queue_with_set(const std::string &variable_name, const std::string &variable_name_to_send,
                                        int state_value) override;
 
-  void add_no_result_to_queue_with_set(NextionComponentBase *component, std::string state_value) override;
-  void add_no_result_to_queue_with_set(std::string variable_name, std::string variable_name_to_send,
-                                       std::string state_value) override;
+  void add_no_result_to_queue_with_set(NextionComponentBase *component, const std::string &state_value) override;
+  void add_no_result_to_queue_with_set(const std::string &variable_name, const std::string &variable_name_to_send,
+                                       const std::string &state_value) override;
 
   void add_to_get_queue(NextionComponentBase *component) override;
 
   void add_addt_command_to_queue(NextionComponentBase *component) override;
 
-  void update_components_by_prefix(std::string page);
+  void update_components_by_prefix(const std::string &prefix);
+
+  void set_touch_sleep_timeout_internal(uint32_t touch_sleep_timeout) {
+    this->touch_sleep_timeout_ = touch_sleep_timeout;
+  }
+  void set_wake_up_page_internal(uint8_t wake_up_page) { this->wake_up_page_ = wake_up_page; }
+  void set_auto_wake_on_touch_internal(bool auto_wake_on_touch) { this->auto_wake_on_touch_ = auto_wake_on_touch; }
 
  protected:
   std::deque<NextionComponentBase *> nextion_queue_;
   uint16_t recv_ret_string_(std::string &response, uint32_t timeout, bool recv_flag);
-  void all_components_send_state_(bool ignore_needs_update = false);
-
+  void all_components_send_state_(bool force_update = false);
+  long comok_sent_ = 0;
   /**
    * @brief
    * Sends commands ignoring of the Nextion has been setup.
@@ -730,7 +734,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   uint8_t nextion_event_;
   // bool nextion_has_event_ = false;
 
-  bool process_nextion_commands_();
+  void process_nextion_commands_();
   bool is_updating_ = false;
   uint32_t touch_sleep_timeout_ = 0;
   int wake_up_page_ = -1;
@@ -741,18 +745,21 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * @param command The command to write, for example "vis b0,0".
    */
   bool send_command_(const char *command);
-  void add_no_result_to_queue_(std::string variable_name);
-  void add_no_result_to_queue_with_command_(std::string variable_name, std::string command);
+  void add_no_result_to_queue_(const std::string &variable_name);
+  void add_no_result_to_queue_with_command_(const std::string &variable_name, const std::string &command);
 
-  bool add_no_result_to_queue_with_printf_(std::string variable_name, const char *format, ...)
+  bool add_no_result_to_queue_with_printf_(const std::string &variable_name, const char *format, ...)
       __attribute__((format(printf, 3, 4)));
 
-  void add_no_result_to_queue_with_set_internal_(std::string variable_name, std::string variable_name_to_send,
-                                                 int state_value, bool is_sleep_safe = false);
+  void add_no_result_to_queue_with_set_internal_(const std::string &variable_name,
+                                                 const std::string &variable_name_to_send, int state_value,
+                                                 bool is_sleep_safe = false);
 
-  void add_no_result_to_queue_with_set_internal_(std::string variable_name, std::string variable_name_to_send,
-                                                 std::string state_value, bool is_sleep_safe = false);
+  void add_no_result_to_queue_with_set_internal_(const std::string &variable_name,
+                                                 const std::string &variable_name_to_send,
+                                                 const std::string &state_value, bool is_sleep_safe = false);
 
+#ifdef USE_TFT_UPLOAD
 #if defined(USE_ETHERNET) || defined(USE_WIFI)
 #ifdef ARDUINO_ARCH_ESP8266
   WiFiClient *wifi_client_{nullptr};
@@ -760,7 +767,6 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   WiFiClient *get_wifi_client_();
 #endif
 
-#ifdef USE_TFT_UPLOAD
   /**
    * will request chunk_size chunks from the web server
    * and send each to the nextion
@@ -794,13 +800,13 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   bool upload_from_buffer_(const uint8_t *file_buf, size_t buf_size);
   void upload_end_();
 
-  bool check_connect_();
-  void set_is_connected_(bool is_connected) { this->is_connected_ = is_connected; }
+#endif
+
+#endif
+
   bool get_is_connected_() { return this->is_connected_; }
 
-#endif
-
-#endif
+  bool check_connect_();
 
   std::vector<NextionComponentBase *> touch_;
   std::vector<NextionComponentBase *> switchtype_;
@@ -813,10 +819,10 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   optional<nextion_writer_t> writer_;
   float brightness_{1.0};
 
-  char device_model_[64];
-  char firmware_version_[64];
-  char serial_number_[64];
-  char flash_size_[64];
+  std::string device_model_;
+  std::string firmware_version_;
+  std::string serial_number_;
+  std::string flash_size_;
 
   void remove_front_no_sensors_();
 
@@ -833,7 +839,6 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   void reset_(bool reset_nextion = true);
 
   std::string command_data_;
-  std::string command_delimiter_;
   bool is_connected_ = false;
   bool dump_ran_ = false;
 };

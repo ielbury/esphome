@@ -20,7 +20,7 @@ class NextionSensor : public NextionComponent, public sensor::Sensor, public Pol
   void set_component_id(uint8_t component_id) { component_id_ = component_id; }
   void set_wave_channel_id(uint8_t wave_chan_id) { this->wave_chan_id_ = wave_chan_id; }
   void set_wave_max_value(uint32_t wave_maxvalue) { this->wave_maxvalue_ = wave_maxvalue; }
-  void process_sensor(std::string variable_name, int state) override;
+  void process_sensor(const std::string &variable_name, int state) override;
 
   void set_state(float state) override { this->set_state(state, true, true); }
   void set_state(float state, bool publish) override { this->set_state(state, publish, true); }
@@ -32,7 +32,7 @@ class NextionSensor : public NextionComponent, public sensor::Sensor, public Pol
   NextionQueueType get_queue_type() override {
     return this->wave_chan_id_ == UINT8_MAX ? NextionQueueType::SENSOR : NextionQueueType::WAVEFORM_SENSOR;
   }
-  void set_state_from_string(std::string state_value, bool publish, bool send_to_nextion) override {}
+  void set_state_from_string(const std::string &state_value, bool publish, bool send_to_nextion) override {}
   void set_state_from_int(int state_value, bool publish, bool send_to_nextion) override {
     this->set_state(state_value, publish, send_to_nextion);
   }

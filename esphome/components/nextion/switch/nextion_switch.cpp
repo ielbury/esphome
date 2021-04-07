@@ -7,7 +7,7 @@ namespace nextion {
 
 static const char *TAG = "nextion_switch";
 
-void NextionSwitch::process_bool(std::string variable_name, bool on) {
+void NextionSwitch::process_bool(const std::string &variable_name, bool on) {
   if (!this->nextion_->is_setup())
     return;
   if (this->variable_name_ == variable_name) {
@@ -43,7 +43,7 @@ void NextionSwitch::set_state(bool state, bool publish, bool send_to_nextion) {
 
   this->update_component_settings();
 
-  ESP_LOGN(TAG, "Updated switch \"%s\" state %s", this->variable_name_.c_str(), state ? "ON" : "OFF");
+  ESP_LOGN(TAG, "Updated switch \"%s\" state %s", this->variable_name_.c_str(), ONOFF(state));
 }
 
 void NextionSwitch::write_state(bool state) { this->set_state(state); }

@@ -11,7 +11,6 @@ from ..base_component import (
 )
 
 CODEOWNERS = ["@senexcrenshaw"]
-DEPENDENCIES = ["display"]
 
 NextionTextSensor = nextion_ns.class_(
     "NextionTextSensor", text_sensor.TextSensor, cg.PollingComponent
