@@ -7,7 +7,11 @@ namespace nextion {
 
 static const char *TAG = "nextion_binarysensor";
 
+<<<<<<< HEAD
 void NextionBinarySensor::process_bool(std::string variable_name, bool state) {
+=======
+void NextionBinarySensor::process_bool(const std::string &variable_name, bool state) {
+>>>>>>> SenexCrenshaw/nextion_upload
   if (!this->nextion_->is_setup())
     return;
 
@@ -61,7 +65,12 @@ void NextionBinarySensor::set_state(bool state, bool publish, bool send_to_nexti
 
   this->update_component_settings();
 
+<<<<<<< HEAD
   ESP_LOGN(TAG, "Wrote state for sensor \"%s\" state %s", this->variable_name_.c_str(), state ? "ON" : "OFF");
+=======
+  ESP_LOGN(TAG, "Wrote state for sensor \"%s\" state %s", this->variable_name_.c_str(),
+           ONOFF(this->variable_name_.c_str()));
+>>>>>>> SenexCrenshaw/nextion_upload
 }
 
 }  // namespace nextion

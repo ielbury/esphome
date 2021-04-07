@@ -5,6 +5,7 @@ namespace esphome {
 namespace nextion {
 
 enum NextionQueueType {
+<<<<<<< HEAD
   SENSOR = 0,
   BINARY_SENSOR = 1,
   SWITCH = 2,
@@ -15,6 +16,18 @@ enum NextionQueueType {
 
 static const char *NextionQueueTypeStrings[] = {"SENSOR",      "BINARY_SENSOR",   "SWITCH",
                                                 "TEXT_SENSOR", "WAVEFORM_SENSOR", "NO_RESULT"};
+=======
+  NO_RESULT = 0,
+  SENSOR = 1,
+  BINARY_SENSOR = 2,
+  SWITCH = 3,
+  TEXT_SENSOR = 4,
+  WAVEFORM_SENSOR = 5,
+};
+
+static const char *NextionQueueTypeStrings[] = {"NO_RESULT", "SENSOR",      "BINARY_SENSOR",
+                                                "SWITCH",    "TEXT_SENSOR", "WAVEFORM_SENSOR"};
+>>>>>>> SenexCrenshaw/nextion_upload
 
 class NextionComponentBase;
 
@@ -32,6 +45,7 @@ class NextionComponentBase {
   }
 
   virtual void update_component_settings(){};
+<<<<<<< HEAD
   virtual void update_component_settings(bool ignore_needs_update){};
 
   virtual void update_component(){};
@@ -39,6 +53,15 @@ class NextionComponentBase {
   virtual void process_touch(uint8_t page_id, uint8_t component_id, bool on){};
   virtual void process_text(std::string variable_name, std::string text_value){};
   virtual void process_bool(std::string variable_name, bool on){};
+=======
+  virtual void update_component_settings(bool force_update){};
+
+  virtual void update_component(){};
+  virtual void process_sensor(const std::string &variable_name, int state){};
+  virtual void process_touch(uint8_t page_id, uint8_t component_id, bool on){};
+  virtual void process_text(const std::string &variable_name, const std::string &text_value){};
+  virtual void process_bool(const std::string &variable_name, bool on){};
+>>>>>>> SenexCrenshaw/nextion_upload
 
   virtual void set_state(float state){};
   virtual void set_state(float state, bool publish){};
@@ -48,9 +71,15 @@ class NextionComponentBase {
   virtual void set_state(bool state, bool publish){};
   virtual void set_state(bool state, bool publish, bool send_to_nextion){};
 
+<<<<<<< HEAD
   virtual void set_state(std::string state) {}
   virtual void set_state(std::string state, bool publish) {}
   virtual void set_state(std::string state, bool publish, bool send_to_nextion){};
+=======
+  virtual void set_state(const std::string &state) {}
+  virtual void set_state(const std::string &state, bool publish) {}
+  virtual void set_state(const std::string &state, bool publish, bool send_to_nextion){};
+>>>>>>> SenexCrenshaw/nextion_upload
 
   uint8_t get_component_id() { return this->component_id_; }
   void set_component_id(uint8_t component_id) { component_id_ = component_id; }
@@ -66,7 +95,11 @@ class NextionComponentBase {
   virtual NextionQueueType get_queue_type() { return NextionQueueType::NO_RESULT; }
   virtual std::string get_queue_type_string() { return NextionQueueTypeStrings[this->get_queue_type()]; }
   virtual void set_state_from_int(int state_value, bool publish, bool send_to_nextion){};
+<<<<<<< HEAD
   virtual void set_state_from_string(std::string state_value, bool publish, bool send_to_nextion){};
+=======
+  virtual void set_state_from_string(const std::string &state_value, bool publish, bool send_to_nextion){};
+>>>>>>> SenexCrenshaw/nextion_upload
   virtual void send_state_to_nextion(){};
   bool get_needs_to_send_update() { return this->needs_to_send_update_; }
   uint8_t get_wave_chan_id() { return this->wave_chan_id_; }

@@ -12,6 +12,10 @@ void NextionComponent::set_background_color(Color bco) {
   this->bco_is_set_ = true;
   this->update_component_settings();
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 void NextionComponent::set_background_pressed_color(Color bco2) {
   if (this->variable_name_ == this->variable_name_to_send_) {
     return;  // This is a variable. no need to set color
@@ -22,6 +26,10 @@ void NextionComponent::set_background_pressed_color(Color bco2) {
   this->bco2_is_set_ = true;
   this->update_component_settings();
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 void NextionComponent::set_foreground_color(Color pco) {
   if (this->variable_name_ == this->variable_name_to_send_) {
     return;  // This is a variable. no need to set color
@@ -31,6 +39,10 @@ void NextionComponent::set_foreground_color(Color pco) {
   this->pco_is_set_ = true;
   this->update_component_settings();
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 void NextionComponent::set_foreground_pressed_color(Color pco2) {
   if (this->variable_name_ == this->variable_name_to_send_) {
     return;  // This is a variable. no need to set color
@@ -40,6 +52,10 @@ void NextionComponent::set_foreground_pressed_color(Color pco2) {
   this->pco2_is_set_ = true;
   this->update_component_settings();
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 void NextionComponent::set_font_id(uint8_t font_id) {
   if (this->variable_name_ == this->variable_name_to_send_) {
     return;  // This is a variable. no need to set color
@@ -49,6 +65,10 @@ void NextionComponent::set_font_id(uint8_t font_id) {
   this->font_id_is_set_ = true;
   this->update_component_settings();
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 void NextionComponent::set_visible(bool visible) {
   if (this->variable_name_ == this->variable_name_to_send_) {
     return;  // This is a variable. no need to set color
@@ -59,14 +79,22 @@ void NextionComponent::set_visible(bool visible) {
   this->update_component_settings();
 }
 
+<<<<<<< HEAD
 void NextionComponent::update_component_settings(bool ignore_needs_update) {
+=======
+void NextionComponent::update_component_settings(bool force_update) {
+>>>>>>> SenexCrenshaw/nextion_upload
   if (this->nextion_->is_sleeping() || !this->nextion_->is_setup() || !this->visible_is_set_ ||
       (!this->visible_needs_update_ && !this->visible_)) {
     this->needs_to_send_update_ = true;
     return;
   }
 
+<<<<<<< HEAD
   if (this->visible_needs_update_ || (ignore_needs_update && this->visible_is_set_)) {
+=======
+  if (this->visible_needs_update_ || (force_update && this->visible_is_set_)) {
+>>>>>>> SenexCrenshaw/nextion_upload
     std::string name_to_send = this->variable_name_;
 
     size_t pos = name_to_send.find_last_of('.');
@@ -85,6 +113,7 @@ void NextionComponent::update_component_settings(bool ignore_needs_update) {
     }
   }
 
+<<<<<<< HEAD
   if (this->bco_needs_update_ || (ignore_needs_update && this->bco2_is_set_)) {
     this->nextion_->set_component_background_color(this->variable_name_.c_str(), this->bco_);
     this->bco_needs_update_ = false;
@@ -98,11 +127,30 @@ void NextionComponent::update_component_settings(bool ignore_needs_update) {
     this->pco_needs_update_ = false;
   }
   if (this->pco2_needs_update_ || (ignore_needs_update && this->pco2_is_set_)) {
+=======
+  if (this->bco_needs_update_ || (force_update && this->bco2_is_set_)) {
+    this->nextion_->set_component_background_color(this->variable_name_.c_str(), this->bco_);
+    this->bco_needs_update_ = false;
+  }
+  if (this->bco2_needs_update_ || (force_update && this->bco2_is_set_)) {
+    this->nextion_->set_component_pressed_background_color(this->variable_name_.c_str(), this->bco2_);
+    this->bco2_needs_update_ = false;
+  }
+  if (this->pco_needs_update_ || (force_update && this->pco_is_set_)) {
+    this->nextion_->set_component_font_color(this->variable_name_.c_str(), this->pco_);
+    this->pco_needs_update_ = false;
+  }
+  if (this->pco2_needs_update_ || (force_update && this->pco2_is_set_)) {
+>>>>>>> SenexCrenshaw/nextion_upload
     this->nextion_->set_component_pressed_font_color(this->variable_name_.c_str(), this->pco2_);
     this->pco2_needs_update_ = false;
   }
 
+<<<<<<< HEAD
   if (this->font_id_needs_update_ || (ignore_needs_update && this->font_id_is_set_)) {
+=======
+  if (this->font_id_needs_update_ || (force_update && this->font_id_is_set_)) {
+>>>>>>> SenexCrenshaw/nextion_upload
     this->nextion_->set_component_font(this->variable_name_.c_str(), this->font_id_);
     this->font_id_needs_update_ = false;
   }

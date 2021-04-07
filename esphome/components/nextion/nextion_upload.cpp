@@ -17,7 +17,11 @@ int Nextion::upload_by_chunks_(HTTPClient *http, int range_start) {
   int range_end = 0;
 
   if (range_start == 0 && this->transfer_buffer_size_ > 16384) {  // Start small at the first run in case of a big skip
+<<<<<<< HEAD
     range_end = 16384;
+=======
+    range_end = 16384 - 1;
+>>>>>>> SenexCrenshaw/nextion_upload
   } else {
     range_end = range_start + this->transfer_buffer_size_ - 1;
   }
@@ -45,6 +49,18 @@ int Nextion::upload_by_chunks_(HTTPClient *http, int range_start) {
   int tries = 1;
   int code = 0;
   while (tries <= 5) {
+<<<<<<< HEAD
+=======
+#ifdef ARDUINO_ARCH_ESP32
+    begin_status = http->begin(this->tft_url_.c_str());
+#endif
+#ifndef CLANG_TIDY
+#ifdef ARDUINO_ARCH_ESP8266
+    begin_status = http->begin(*this->get_wifi_client_(), this->tft_url_.c_str());
+#endif
+#endif
+
+>>>>>>> SenexCrenshaw/nextion_upload
     ++tries;
     if (!begin_status) {
       ESP_LOGD(TAG, "upload_by_chunks_: connection failed");
@@ -85,10 +101,19 @@ int Nextion::upload_by_chunks_(HTTPClient *http, int range_start) {
     sent += c;
   }
   http->end();
+<<<<<<< HEAD
 
   for (uint32_t i = 0; i <= range; i += 4096) {
     this->write_array(&this->transfer_buffer_[i], 4096);
     this->content_length_ -= 4096;
+=======
+  ESP_LOGN(TAG, "this->content_length_ %d sent %d", this->content_length_, sent);
+  for (uint32_t i = 0; i < range; i += 4096) {
+    this->write_array(&this->transfer_buffer_[i], 4096);
+    this->content_length_ -= 4096;
+    ESP_LOGN(TAG, "this->content_length_ %d range %d range_end %d range_start %d", this->content_length_, range,
+             range_end, range_start);
+>>>>>>> SenexCrenshaw/nextion_upload
 
     if (!this->upload_first_chunk_sent_) {
       this->upload_first_chunk_sent_ = true;
@@ -102,10 +127,17 @@ int Nextion::upload_by_chunks_(HTTPClient *http, int range_start) {
       for (int i = 0; i < 4; ++i) {
         result += static_cast<uint8_t>(recv_string[i + 1]) << (8 * i);
       }
+<<<<<<< HEAD
       if (result != 0) {
         ESP_LOGD(TAG, "Nextion reported new range %d", result);
         this->content_length_ = this->tft_size_ - result;
         return result > 0 ? result : range_end + 1;
+=======
+      if (result > 0) {
+        ESP_LOGD(TAG, "Nextion reported new range %d", result);
+        this->content_length_ = this->tft_size_ - result;
+        return result;
+>>>>>>> SenexCrenshaw/nextion_upload
       }
     }
     recv_string.clear();
@@ -191,7 +223,11 @@ void Nextion::upload_tft() {
     this->upload_end_();
   }
 
+<<<<<<< HEAD
   ESP_LOGD(TAG, "Updating Nextion %s...", this->device_model_);
+=======
+  ESP_LOGD(TAG, "Updating Nextion %s...", this->device_model_.c_str());
+>>>>>>> SenexCrenshaw/nextion_upload
   // The Nextion will ignore the update command if it is sleeping
 
   this->send_command_("sleep=0");

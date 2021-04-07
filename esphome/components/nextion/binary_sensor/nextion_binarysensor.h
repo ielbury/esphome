@@ -17,7 +17,11 @@ class NextionBinarySensor : public NextionComponent,
   void update_component() override { this->update(); }
   void update() override;
   void send_state_to_nextion() override { this->set_state(this->state, false); };
+<<<<<<< HEAD
   void process_bool(std::string variable_name, bool state) override;
+=======
+  void process_bool(const std::string &variable_name, bool state) override;
+>>>>>>> SenexCrenshaw/nextion_upload
   void process_touch(uint8_t page_id, uint8_t component_id, bool state) override;
 
   // Set the components page id for Nextion Touch Component
@@ -30,7 +34,11 @@ class NextionBinarySensor : public NextionComponent,
   void set_state(bool state, bool publish, bool send_to_nextion) override;
 
   NextionQueueType get_queue_type() override { return NextionQueueType::BINARY_SENSOR; }
+<<<<<<< HEAD
   void set_state_from_string(std::string state_value, bool publish, bool send_to_nextion) override {}
+=======
+  void set_state_from_string(const std::string &state_value, bool publish, bool send_to_nextion) override {}
+>>>>>>> SenexCrenshaw/nextion_upload
   void set_state_from_int(int state_value, bool publish, bool send_to_nextion) override {
     this->set_state(state_value == 0 ? false : true, publish, send_to_nextion);
   }

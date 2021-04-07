@@ -13,7 +13,10 @@ from ..base_component import (
 )
 
 CODEOWNERS = ["@senexcrenshaw"]
+<<<<<<< HEAD
 DEPENDENCIES = ["display"]
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 
 NextionSwitch = nextion_ns.class_("NextionSwitch", switch.Switch, cg.PollingComponent)
 
