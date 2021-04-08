@@ -735,6 +735,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   // bool nextion_has_event_ = false;
 
   void process_nextion_commands_();
+  void process_serial_();
   bool is_updating_ = false;
   uint32_t touch_sleep_timeout_ = 0;
   int wake_up_page_ = -1;

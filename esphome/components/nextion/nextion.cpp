@@ -202,9 +202,13 @@ bool Nextion::send_command_(const char *command) {
 
 #ifdef NEXTION_PROTOCOL_LOG
 void Nextion::print_queue_members_() {
-  ESP_LOGN(TAG, "print_queue_members_ size %zu", this->nextion_queue_.size());
+  ESP_LOGN(TAG, "print_queue_members_ (top 10) size %zu", this->nextion_queue_.size());
   ESP_LOGN(TAG, "*******************************************");
+  int count = 0;
   for (auto *i : this->nextion_queue_) {
+    if (count++ == 10)
+      break;
+
     if (i == nullptr) {
       ESP_LOGN(TAG, "Nextion queue is null");
     } else {
@@ -223,14 +227,17 @@ void Nextion::loop() {
   this->process_nextion_commands_();
 }
 
-// nextion.tech/instruction-set/
-void Nextion::process_nextion_commands_() {
+void Nextion::process_serial_() {
   uint8_t d;
 
   while (this->available()) {
     read_byte(&d);
     this->command_data_ += d;
   }
+}
+// nextion.tech/instruction-set/
+void Nextion::process_nextion_commands_() {
+  this->process_serial_();
 
   if (this->command_data_.length() == 0) {
     return;
@@ -240,11 +247,10 @@ void Nextion::process_nextion_commands_() {
   std::string to_process;
 
   // ESP_LOGN(TAG, "this->command_data_ %s length %d", this->command_data_.c_str(), this->command_data_.length());
-
-  while ((to_process_length = this->command_data_.find(COMMAND_DELIMITER)) != std::string::npos) {
 #ifdef NEXTION_PROTOCOL_LOG
-    this->print_queue_members_();
+  this->print_queue_members_();
 #endif
+  while ((to_process_length = this->command_data_.find(COMMAND_DELIMITER)) != std::string::npos) {
     ESP_LOGN(TAG, "print_queue_members_ size %zu", this->nextion_queue_.size());
     while (to_process_length + COMMAND_DELIMITER.length() < this->command_data_.length() &&
            static_cast<uint8_t>(this->command_data_[to_process_length + COMMAND_DELIMITER.length()]) == 0xFF) {
@@ -706,7 +712,9 @@ void Nextion::process_nextion_commands_() {
     }
 
     this->command_data_.erase(0, to_process_length + COMMAND_DELIMITER.length() + 1);
+    this->process_serial_();
   }
+  this->process_serial_();
 }
 
 void Nextion::set_nextion_sensor_state(int queue_type, const std::string &name, float state) {
