@@ -795,6 +795,10 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   bool process_nextion_commands_();
 =======
   void process_nextion_commands_();
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
+  void process_serial_();
 >>>>>>> SenexCrenshaw/nextion_upload
   bool is_updating_ = false;
   uint32_t touch_sleep_timeout_ = 0;
