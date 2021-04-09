@@ -8,7 +8,11 @@ namespace nextion {
 static const char *TAG = "nextion_sensor";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void NextionSensor::process_sensor(std::string variable_name, int state) {
+=======
+void NextionSensor::process_sensor(const std::string &variable_name, int state) {
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 void NextionSensor::process_sensor(const std::string &variable_name, int state) {
 >>>>>>> SenexCrenshaw/nextion_upload

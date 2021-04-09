@@ -16,9 +16,12 @@ from ..base_component import (
 CODEOWNERS = ["@senexcrenshaw"]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 DEPENDENCIES = ["display"]
 
 
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 >>>>>>> SenexCrenshaw/nextion_upload
 NextionBinarySensor = nextion_ns.class_(

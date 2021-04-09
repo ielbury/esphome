@@ -6,6 +6,7 @@ namespace nextion {
 
 enum NextionQueueType {
 <<<<<<< HEAD
+<<<<<<< HEAD
   SENSOR = 0,
   BINARY_SENSOR = 1,
   SWITCH = 2,
@@ -17,6 +18,8 @@ enum NextionQueueType {
 static const char *NextionQueueTypeStrings[] = {"SENSOR",      "BINARY_SENSOR",   "SWITCH",
                                                 "TEXT_SENSOR", "WAVEFORM_SENSOR", "NO_RESULT"};
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   NO_RESULT = 0,
   SENSOR = 1,
   BINARY_SENSOR = 2,
@@ -27,6 +30,9 @@ static const char *NextionQueueTypeStrings[] = {"SENSOR",      "BINARY_SENSOR", 
 
 static const char *NextionQueueTypeStrings[] = {"NO_RESULT", "SENSOR",      "BINARY_SENSOR",
                                                 "SWITCH",    "TEXT_SENSOR", "WAVEFORM_SENSOR"};
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
 
 class NextionComponentBase;
@@ -46,6 +52,7 @@ class NextionComponentBase {
 
   virtual void update_component_settings(){};
 <<<<<<< HEAD
+<<<<<<< HEAD
   virtual void update_component_settings(bool ignore_needs_update){};
 
   virtual void update_component(){};
@@ -54,6 +61,8 @@ class NextionComponentBase {
   virtual void process_text(std::string variable_name, std::string text_value){};
   virtual void process_bool(std::string variable_name, bool on){};
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   virtual void update_component_settings(bool force_update){};
 
   virtual void update_component(){};
@@ -61,6 +70,9 @@ class NextionComponentBase {
   virtual void process_touch(uint8_t page_id, uint8_t component_id, bool on){};
   virtual void process_text(const std::string &variable_name, const std::string &text_value){};
   virtual void process_bool(const std::string &variable_name, bool on){};
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
 
   virtual void set_state(float state){};
@@ -72,9 +84,15 @@ class NextionComponentBase {
   virtual void set_state(bool state, bool publish, bool send_to_nextion){};
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   virtual void set_state(std::string state) {}
   virtual void set_state(std::string state, bool publish) {}
   virtual void set_state(std::string state, bool publish, bool send_to_nextion){};
+=======
+  virtual void set_state(const std::string &state) {}
+  virtual void set_state(const std::string &state, bool publish) {}
+  virtual void set_state(const std::string &state, bool publish, bool send_to_nextion){};
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   virtual void set_state(const std::string &state) {}
   virtual void set_state(const std::string &state, bool publish) {}
@@ -96,7 +114,11 @@ class NextionComponentBase {
   virtual std::string get_queue_type_string() { return NextionQueueTypeStrings[this->get_queue_type()]; }
   virtual void set_state_from_int(int state_value, bool publish, bool send_to_nextion){};
 <<<<<<< HEAD
+<<<<<<< HEAD
   virtual void set_state_from_string(std::string state_value, bool publish, bool send_to_nextion){};
+=======
+  virtual void set_state_from_string(const std::string &state_value, bool publish, bool send_to_nextion){};
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   virtual void set_state_from_string(const std::string &state_value, bool publish, bool send_to_nextion){};
 >>>>>>> SenexCrenshaw/nextion_upload

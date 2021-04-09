@@ -10,11 +10,18 @@ static const char *TAG = "nextion";
 
 void Nextion::setup() {
 <<<<<<< HEAD
+<<<<<<< HEAD
   this->command_delimiter_.append(3, 255);
 
   this->is_setup_ = false;
   this->ignore_is_setup_ = true;
 
+=======
+  this->is_setup_ = false;
+  this->ignore_is_setup_ = true;
+
+  // Wake up the nextion
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   this->is_setup_ = false;
   this->ignore_is_setup_ = true;
@@ -28,6 +35,12 @@ void Nextion::setup() {
   this->send_command_("sleep=0");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  // Reboot it
+  this->send_command_("rest");
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   // Reboot it
   this->send_command_("rest");
@@ -40,6 +53,7 @@ bool Nextion::check_connect_() {
   if (this->get_is_connected_())
     return true;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   this->ignore_is_setup_ = true;
   std::string response;
@@ -85,6 +99,8 @@ bool Nextion::check_connect_() {
   this->dump_config();
   // this->reset_(false);
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   if (this->comok_sent_ == 0) {
     this->reset_(false);
 
@@ -129,6 +145,37 @@ bool Nextion::check_connect_() {
   while ((start = response.find_first_not_of(',', end)) != std::string::npos) {
     end = response.find(',', start);
     connect_info.push_back(response.substr(start, end - start));
+<<<<<<< HEAD
+  }
+
+  if (connect_info.size() == 7) {
+    ESP_LOGN(TAG, "Received connect_info %zu", connect_info.size());
+
+    this->device_model_ = connect_info[2];
+    this->firmware_version_ = connect_info[3];
+    this->serial_number_ = connect_info[5];
+    this->flash_size_ = connect_info[6];
+  } else {
+    ESP_LOGE(TAG, "Nextion returned bad connect value \"%s\"", response.c_str());
+  }
+
+  this->send_command_("bkcmd=3");  // Always, returns 0x00 to 0x23 result of serial command.
+
+  this->set_backlight_brightness(this->brightness_);
+  this->goto_page("0");
+
+  if (this->touch_sleep_timeout_ != 0) {
+    this->set_touch_sleep_timeout(this->touch_sleep_timeout_);
+  }
+
+  if (this->wake_up_page_ != -1) {
+    this->set_wake_up_page(this->wake_up_page_);
+  }
+
+  this->ignore_is_setup_ = false;
+  this->dump_config();
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
   }
 
   if (connect_info.size() == 7) {
@@ -163,6 +210,7 @@ bool Nextion::check_connect_() {
 
 void Nextion::reset_(bool reset_nextion) {
 <<<<<<< HEAD
+<<<<<<< HEAD
   // this->ignore_is_setup_ = true;
 
   if (reset_nextion) {
@@ -172,6 +220,8 @@ void Nextion::reset_(bool reset_nextion) {
 
 =======
 >>>>>>> SenexCrenshaw/nextion_upload
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   uint8_t d;
 
   while (this->available()) {  // Clear receive buffer
@@ -179,9 +229,12 @@ void Nextion::reset_(bool reset_nextion) {
   };
   this->nextion_queue_.empty();
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   // this->ignore_is_setup_ = false;
   App.feed_wdt();
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 >>>>>>> SenexCrenshaw/nextion_upload
 }
@@ -193,6 +246,7 @@ void Nextion::dump_config() {
 
   ESP_LOGCONFIG(TAG, "Nextion:");
 <<<<<<< HEAD
+<<<<<<< HEAD
   ESP_LOGCONFIG(TAG, "  Baud Rate:        %d", this->parent_->get_baud_rate());
   ESP_LOGCONFIG(TAG, "  Device Model:     %s", this->device_model_);
   ESP_LOGCONFIG(TAG, "  Firmware Version: %s", this->firmware_version_);
@@ -203,11 +257,16 @@ void Nextion::dump_config() {
   ESP_LOGCONFIG(TAG, "  Board Has PSRAM:  %s", YESNO(psramFound()));
 #endif
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   ESP_LOGCONFIG(TAG, "  Device Model:     %s", this->device_model_.c_str());
   ESP_LOGCONFIG(TAG, "  Firmware Version: %s", this->firmware_version_.c_str());
   ESP_LOGCONFIG(TAG, "  Serial Number:    %s", this->serial_number_.c_str());
   ESP_LOGCONFIG(TAG, "  Flash Size:       %s", this->flash_size_.c_str());
   ESP_LOGCONFIG(TAG, "  Wake On Touch:    %s", this->auto_wake_on_touch_ ? "True" : "False");
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
 
   if (this->touch_sleep_timeout_ != 0) {
@@ -313,11 +372,15 @@ void Nextion::loop() {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // nextion.tech/instruction-set/
 <<<<<<< HEAD
 bool Nextion::process_nextion_commands_() {
 =======
 void Nextion::process_nextion_commands_() {
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
+void Nextion::process_serial_() {
 >>>>>>> SenexCrenshaw/nextion_upload
 =======
 void Nextion::process_serial_() {
@@ -328,6 +391,7 @@ void Nextion::process_serial_() {
     read_byte(&d);
     this->command_data_ += d;
   }
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -345,10 +409,13 @@ void Nextion::process_serial_() {
            static_cast<uint8_t>(this->command_data_[to_process_length + this->command_delimiter_.length()]) == 0xFF) {
 =======
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 }
 // nextion.tech/instruction-set/
 void Nextion::process_nextion_commands_() {
   this->process_serial_();
+<<<<<<< HEAD
 >>>>>>> SenexCrenshaw/nextion_upload
 
   if (this->command_data_.length() == 0) {
@@ -358,6 +425,16 @@ void Nextion::process_nextion_commands_() {
   size_t to_process_length = 0;
   std::string to_process;
 
+=======
+
+  if (this->command_data_.length() == 0) {
+    return;
+  }
+
+  size_t to_process_length = 0;
+  std::string to_process;
+
+>>>>>>> SenexCrenshaw/nextion_upload
   // ESP_LOGN(TAG, "this->command_data_ %s length %d", this->command_data_.c_str(), this->command_data_.length());
 #ifdef NEXTION_PROTOCOL_LOG
   this->print_queue_members_();
@@ -366,6 +443,9 @@ void Nextion::process_nextion_commands_() {
     ESP_LOGN(TAG, "print_queue_members_ size %zu", this->nextion_queue_.size());
     while (to_process_length + COMMAND_DELIMITER.length() < this->command_data_.length() &&
            static_cast<uint8_t>(this->command_data_[to_process_length + COMMAND_DELIMITER.length()]) == 0xFF) {
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
       ++to_process_length;
       ESP_LOGN(TAG, "Add extra 0xFF to process");
@@ -373,10 +453,17 @@ void Nextion::process_nextion_commands_() {
 
     this->nextion_event_ = this->command_data_[0];
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     to_process_length -= 1;
     to_process = this->command_data_.substr(1, to_process_length);
 
+=======
+
+    to_process_length -= 1;
+    to_process = this->command_data_.substr(1, to_process_length);
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 
     to_process_length -= 1;
@@ -399,13 +486,19 @@ void Nextion::process_nextion_commands_() {
           ESP_LOGN(TAG, "Removing %s from the queue", component->get_variable_name().c_str());
 
 <<<<<<< HEAD
+<<<<<<< HEAD
           this->nextion_queue_.pop_front();
           delete component;
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
           if (component->get_queue_type() == NextionQueueType::NO_RESULT) {
             delete component;
           }
           this->nextion_queue_.pop_front();
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
 
           if (!this->is_setup_) {
@@ -415,14 +508,18 @@ void Nextion::process_nextion_commands_() {
             }
           }
 <<<<<<< HEAD
+<<<<<<< HEAD
         } else {
           ESP_LOGE(TAG, "Queue is empty!");  // Maybe make VV or N
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
         }
 
         break;
       case 0x02:  // invalid Component ID or name was used
 
         if (!this->nextion_queue_.empty()) {
+<<<<<<< HEAD
           NextionComponentBase *nextion_queue = this->nextion_queue_.front();
 
           ESP_LOGN(TAG, "Removing %s from the queue", nextion_queue->get_variable_name().c_str());
@@ -432,11 +529,24 @@ void Nextion::process_nextion_commands_() {
           if (nextion_queue->get_queue_type() == NextionQueueType::NO_RESULT) {
             delete nextion_queue;
           }
+=======
+          NextionComponentBase *component = this->nextion_queue_.front();
+
+          ESP_LOGN(TAG, "Removing %s from the queue", component->get_variable_name().c_str());
+
+          ESP_LOGW(TAG, "Nextion reported component ID \"%s\" invalid!", component->get_variable_name().c_str());
+
+          if (component->get_queue_type() == NextionQueueType::NO_RESULT) {
+            delete component;
+          }
+          this->nextion_queue_.pop_front();
+>>>>>>> SenexCrenshaw/nextion_upload
 
         } else {
           ESP_LOGE(TAG, "Nextion reported component ID invalid but queue is empty!");
         }
 
+<<<<<<< HEAD
         break;
 =======
         }
@@ -460,6 +570,9 @@ void Nextion::process_nextion_commands_() {
           ESP_LOGE(TAG, "Nextion reported component ID invalid but queue is empty!");
         }
 
+        break;
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
         break;
 >>>>>>> SenexCrenshaw/nextion_upload
       case 0x03:  // invalid Page ID or name was used
@@ -488,18 +601,24 @@ void Nextion::process_nextion_commands_() {
           for (auto &i : this->nextion_queue_) {
             if (i->get_queue_type() == NextionQueueType::WAVEFORM_SENSOR) {
 <<<<<<< HEAD
+<<<<<<< HEAD
               ESP_LOGN(TAG, "Removing waveform from queue with component id %d and waveform id %d",
                        i->get_component_id(), i->get_wave_channel_id());
 
               ESP_LOGW(TAG, "Nextion reported invalid Waveform ID %d or Channel # %d was used!", i->get_component_id(),
                        i->get_wave_channel_id());
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
               ESP_LOGW(TAG, "Nextion reported invalid Waveform ID %d or Channel # %d was used!", i->get_component_id(),
                        i->get_wave_channel_id());
 
               ESP_LOGN(TAG, "Removing waveform from queue with component id %d and waveform id %d",
                        i->get_component_id(), i->get_wave_channel_id());
 
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
               found = index;
               break;
@@ -520,6 +639,7 @@ void Nextion::process_nextion_commands_() {
 
         if (!this->nextion_queue_.empty()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
           NextionComponentBase *nextion_queue = this->nextion_queue_.front();
 
           ESP_LOGN(TAG, "Removing %s from the queue", nextion_queue->get_variable_name().c_str());
@@ -531,6 +651,8 @@ void Nextion::process_nextion_commands_() {
             delete nextion_queue;
           }
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
           NextionComponentBase *component = this->nextion_queue_.front();
 
           ESP_LOGN(TAG, "Removing %s from the queue", component->get_variable_name().c_str());
@@ -541,6 +663,9 @@ void Nextion::process_nextion_commands_() {
             delete component;
           }
           this->nextion_queue_.pop_front();
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
 
         } else {
@@ -571,6 +696,7 @@ void Nextion::process_nextion_commands_() {
 
         if (!this->nextion_queue_.empty()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
           auto nextion_queue = this->nextion_queue_.front();
 
           ESP_LOGN(TAG, "Removing %s from the queue", nextion_queue->get_variable_name().c_str());
@@ -580,6 +706,8 @@ void Nextion::process_nextion_commands_() {
             delete nextion_queue;
           }
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
           NextionComponentBase *component = this->nextion_queue_.front();
 
           ESP_LOGN(TAG, "Removing %s from the queue", component->get_variable_name().c_str());
@@ -588,6 +716,9 @@ void Nextion::process_nextion_commands_() {
             delete component;
           }
           this->nextion_queue_.pop_front();
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
         }
 
@@ -644,10 +775,13 @@ void Nextion::process_nextion_commands_() {
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (to_process_length == 0) {
           ESP_LOGE(TAG, "ERROR: Received string return but no data!");
           break;
         }
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 >>>>>>> SenexCrenshaw/nextion_upload
         auto nextion_queue = this->nextion_queue_.front();
@@ -664,10 +798,16 @@ void Nextion::process_nextion_commands_() {
 
         nextion_queue->set_state_from_string(to_process, true, false);
 <<<<<<< HEAD
+<<<<<<< HEAD
         this->nextion_queue_.pop_front();
         if (nextion_queue->get_queue_type() == NextionQueueType::NO_RESULT) {
           delete nextion_queue;
         }
+=======
+
+        this->nextion_queue_.pop_front();
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 
         this->nextion_queue_.pop_front();
@@ -711,8 +851,13 @@ void Nextion::process_nextion_commands_() {
             nextion_queue->get_queue_type() != NextionQueueType::BINARY_SENSOR &&
             nextion_queue->get_queue_type() != NextionQueueType::SWITCH) {
 <<<<<<< HEAD
+<<<<<<< HEAD
           ESP_LOGE(TAG, "ERROR: Received numeric return but next in queue \"%s\" is not a valid sensor",
                    nextion_queue->get_variable_name().c_str());
+=======
+          ESP_LOGE(TAG, "ERROR: Received numeric return but next in queue \"%s\" is not a valid sensor type %d",
+                   nextion_queue->get_variable_name().c_str(), nextion_queue->get_queue_type());
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
           ESP_LOGE(TAG, "ERROR: Received numeric return but next in queue \"%s\" is not a valid sensor type %d",
                    nextion_queue->get_variable_name().c_str(), nextion_queue->get_queue_type());
@@ -723,6 +868,10 @@ void Nextion::process_nextion_commands_() {
 
         nextion_queue->set_state_from_int(value, true, false);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -735,7 +884,11 @@ void Nextion::process_nextion_commands_() {
         ESP_LOGVV(TAG, "Received Nextion entering sleep automatically");
         this->sleep_callback_.call();
 <<<<<<< HEAD
+<<<<<<< HEAD
         this->set_is_sleeping_(true);
+=======
+        this->is_sleeping_ = true;
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
         this->is_sleeping_ = true;
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -746,7 +899,11 @@ void Nextion::process_nextion_commands_() {
         ESP_LOGVV(TAG, "Received Nextion leaves sleep automatically");
         this->wake_callback_.call();
 <<<<<<< HEAD
+<<<<<<< HEAD
         this->set_is_sleeping_(false);
+=======
+        this->is_sleeping_ = false;
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
         this->is_sleeping_ = false;
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -760,6 +917,7 @@ void Nextion::process_nextion_commands_() {
       }
       case 0x89: {  // start SD card upgrade
 <<<<<<< HEAD
+<<<<<<< HEAD
         break;
       }
       // Data from nextion is
@@ -856,6 +1014,8 @@ void Nextion::process_nextion_commands_() {
       }
       // Data from nextion is
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
         break;
       }
       // Data from nextion is
@@ -948,6 +1108,7 @@ void Nextion::process_nextion_commands_() {
         for (auto *textsensortype : this->textsensortype_) {
           textsensortype->process_text(variable_name, text_value);
         }
+<<<<<<< HEAD
         break;
       }
       // Data from nextion is
@@ -987,6 +1148,42 @@ void Nextion::process_nextion_commands_() {
         ESP_LOGVV(TAG, "Nextion reported data transmit finished!");
         break;
       }
+=======
+        break;
+      }
+      // Data from nextion is
+      // 0x93 - Start
+      // variable length of 0x70 return formatted data (bytes) that contain the variable name: prints "temp1",0
+      // 00 - NULL
+      // 00/01 - Single byte for on/off
+      // FF FF FF - End
+      case 0x93: {  // Binary Sensor component
+        std::string variable_name;
+        uint8_t index = 0;
+
+        // Get variable name
+        index = to_process.find('\0');
+        if (static_cast<char>(index) == std::string::npos || (to_process_length - index - 1) < 1) {
+          ESP_LOGE(TAG, "Bad binary sensor component data received for 0x92 event!");
+          ESP_LOGN(TAG, "to_process %s %zu %d", to_process.c_str(), to_process_length, index);
+          break;
+        }
+
+        variable_name = to_process.substr(0, index);
+        ++index;
+
+        ESP_LOGN(TAG, "Got Binary Sensor variable_name=%s value=%d", variable_name.c_str(), to_process[index] != 0);
+
+        for (auto *binarysensortype : this->binarysensortype_) {
+          binarysensortype->process_bool(&variable_name[0], to_process[index] != 0);
+        }
+        break;
+      }
+      case 0xFD: {  // data transparent transmit finished
+        ESP_LOGVV(TAG, "Nextion reported data transmit finished!");
+        break;
+      }
+>>>>>>> SenexCrenshaw/nextion_upload
       case 0xFE: {  // data transparent transmit ready
         ESP_LOGVV(TAG, "Nextion reported ready for transmit!");
 
@@ -1027,11 +1224,14 @@ void Nextion::process_nextion_commands_() {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     ESP_LOGN(TAG, "nextion loop end");
 
     this->command_data_.erase(0, to_process_length + this->command_delimiter_.length() + 1);
     App.feed_wdt();
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
     this->command_data_.erase(0, to_process_length + COMMAND_DELIMITER.length() + 1);
     this->process_serial_();
   }
@@ -1063,6 +1263,8 @@ void Nextion::set_nextion_sensor_state(NextionQueueType queue_type, const std::s
         }
       }
       break;
+<<<<<<< HEAD
+=======
     }
     case NextionQueueType::SWITCH: {
       for (auto *sensor : this->switchtype_) {
@@ -1077,6 +1279,29 @@ void Nextion::set_nextion_sensor_state(NextionQueueType queue_type, const std::s
   }
 }
 
+void Nextion::set_nextion_text_state(const std::string &name, const std::string &state) {
+  ESP_LOGD(TAG, "Received state for variable %s, state %s", name.c_str(), state.c_str());
+
+  for (auto *sensor : this->textsensortype_) {
+    if (name == sensor->get_variable_name()) {
+      sensor->set_state(state, true, true);
+      break;
+>>>>>>> SenexCrenshaw/nextion_upload
+    }
+    case NextionQueueType::SWITCH: {
+      for (auto *sensor : this->switchtype_) {
+        if (name == sensor->get_variable_name()) {
+          sensor->set_state(state != 0, true, true);
+          break;
+        }
+      }
+      break;
+    }
+    default: { ESP_LOGW(TAG, "set_nextion_sensor_state does not support a queue type %d", queue_type); }
+  }
+}
+
+<<<<<<< HEAD
 void Nextion::set_nextion_text_state(const std::string &name, const std::string &state) {
   ESP_LOGD(TAG, "Received state for variable %s, state %s", name.c_str(), state.c_str());
 
@@ -1352,6 +1577,106 @@ void Nextion::add_no_result_to_queue_(const std::string &variable_name) {
   nextion_queue->set_variable_name(variable_name);
 
 >>>>>>> SenexCrenshaw/nextion_upload
+=======
+void Nextion::all_components_send_state_(bool force_update) {
+  for (auto *binarysensortype : this->binarysensortype_) {
+    if (force_update || binarysensortype->get_needs_to_send_update())
+      binarysensortype->send_state_to_nextion();
+  }
+  for (auto *sensortype : this->sensortype_) {
+    if ((force_update || sensortype->get_needs_to_send_update()) && sensortype->get_wave_chan_id() == 0)
+      sensortype->send_state_to_nextion();
+  }
+  for (auto *switchtype : this->switchtype_) {
+    if (force_update || switchtype->get_needs_to_send_update())
+      switchtype->send_state_to_nextion();
+  }
+  for (auto *textsensortype : this->textsensortype_) {
+    if (force_update || textsensortype->get_needs_to_send_update())
+      textsensortype->send_state_to_nextion();
+  }
+}
+
+void Nextion::update_components_by_prefix(const std::string &prefix) {
+  for (auto *binarysensortype : this->binarysensortype_) {
+    if (binarysensortype->get_variable_name().find(prefix, 0) != std::string::npos)
+      binarysensortype->update_component_settings(true);
+  }
+  for (auto *sensortype : this->sensortype_) {
+    if (sensortype->get_variable_name().find(prefix, 0) != std::string::npos)
+      sensortype->update_component_settings(true);
+  }
+  for (auto *switchtype : this->switchtype_) {
+    if (switchtype->get_variable_name().find(prefix, 0) != std::string::npos)
+      switchtype->update_component_settings(true);
+  }
+  for (auto *textsensortype : this->textsensortype_) {
+    if (textsensortype->get_variable_name().find(prefix, 0) != std::string::npos)
+      textsensortype->update_component_settings(true);
+  }
+}
+
+uint16_t Nextion::recv_ret_string_(std::string &response, uint32_t timeout, bool recv_flag) {
+  uint16_t ret = 0;
+  uint8_t c = 0;
+  uint8_t nr_of_ff_bytes = 0;
+  long start;
+  bool exit_flag = false;
+  bool ff_flag = false;
+
+  start = millis();
+
+  while (millis() - start <= timeout) {
+    while (this->available()) {
+      this->read_byte(&c);
+      if (c == 0xFF)
+        nr_of_ff_bytes++;
+      else {
+        nr_of_ff_bytes = 0;
+        ff_flag = false;
+      }
+
+      if (nr_of_ff_bytes >= 3)
+        ff_flag = true;
+
+      response += (char) c;
+      if (recv_flag) {
+        if (response.find(0x05) != std::string::npos) {
+          exit_flag = true;
+        }
+      }
+      App.feed_wdt();
+      delay(1);
+    }
+
+    if (exit_flag || ff_flag) {
+      break;
+    }
+  }
+
+  // if (exit_flag || ff_flag) {
+  //   ESP_LOGD(TAG, "Flag set");
+  // } else {
+  //   ESP_LOGD(TAG, "Flag NOT set");
+  // }
+
+  if (ff_flag)
+    response = response.substr(0, response.length() - 3);  // Remove last 3 0xFF
+
+  ret = response.length();
+  return ret;
+}
+
+/**
+ * @brief
+ *
+ * @param variable_name Name for the queue
+ */
+void Nextion::add_no_result_to_queue_(const std::string &variable_name) {
+  nextion::NextionComponentBase *nextion_queue = new nextion::NextionComponentBase;
+  nextion_queue->set_variable_name(variable_name);
+
+>>>>>>> SenexCrenshaw/nextion_upload
   this->nextion_queue_.push_back(nextion_queue);
 
   ESP_LOGN(TAG, "Add to queue type: NORESULT component %s", nextion_queue->get_variable_name().c_str());
@@ -1364,6 +1689,7 @@ void Nextion::add_no_result_to_queue_(const std::string &variable_name) {
  * @param command
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void Nextion::add_no_result_to_queue_with_command_(std::string variable_name, std::string command) {
   if (!this->is_setup() && !this->ignore_is_setup_)
     return;
@@ -1374,12 +1700,17 @@ void Nextion::add_no_result_to_queue_with_command_(std::string variable_name, st
     this->send_command_(command.c_str());
   }
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 void Nextion::add_no_result_to_queue_with_command_(const std::string &variable_name, const std::string &command) {
   if ((!this->is_setup() && !this->ignore_is_setup_) || command.empty())
     return;
 
   this->add_no_result_to_queue_(variable_name);
   this->send_command_(command.c_str());
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
 }
 
@@ -1391,7 +1722,11 @@ void Nextion::add_no_result_to_queue_with_command_(const std::string &variable_n
  * @param ... The format arguments
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool Nextion::add_no_result_to_queue_with_printf_(std::string variable_name, const char *format, ...) {
+=======
+bool Nextion::add_no_result_to_queue_with_printf_(const std::string &variable_name, const char *format, ...) {
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 bool Nextion::add_no_result_to_queue_with_printf_(const std::string &variable_name, const char *format, ...) {
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -1424,7 +1759,94 @@ bool Nextion::add_no_result_to_queue_with_printf_(const std::string &variable_na
 void Nextion::add_no_result_to_queue_with_set(NextionComponentBase *component, int state_value) {
   this->add_no_result_to_queue_with_set(component->get_variable_name(), component->get_variable_name_to_send(),
                                         state_value);
+<<<<<<< HEAD
+=======
 }
+
+void Nextion::add_no_result_to_queue_with_set(const std::string &variable_name,
+                                              const std::string &variable_name_to_send, int state_value) {
+  this->add_no_result_to_queue_with_set_internal_(variable_name, variable_name_to_send, state_value);
+}
+
+void Nextion::add_no_result_to_queue_with_set_internal_(const std::string &variable_name,
+                                                        const std::string &variable_name_to_send, int state_value,
+                                                        bool is_sleep_safe) {
+  if ((!this->is_setup() && !this->ignore_is_setup_) || (!is_sleep_safe && this->is_sleeping()))
+    return;
+
+  this->add_no_result_to_queue_with_printf_(variable_name, "%s=%d", variable_name_to_send.c_str(), state_value);
+>>>>>>> SenexCrenshaw/nextion_upload
+}
+/**
+ * @brief
+ *
+ * @param variable_name Variable name for the queue
+ * @param variable_name_to_send Variable name for the left of the command
+ * @param state_value Sting value to set
+ * @param is_sleep_safe The command is safe to send when the Nextion is sleeping
+ */
+
+void Nextion::add_no_result_to_queue_with_set(NextionComponentBase *component, const std::string &state_value) {
+  this->add_no_result_to_queue_with_set(component->get_variable_name(), component->get_variable_name_to_send(),
+                                        state_value);
+}
+void Nextion::add_no_result_to_queue_with_set(const std::string &variable_name,
+                                              const std::string &variable_name_to_send,
+                                              const std::string &state_value) {
+  this->add_no_result_to_queue_with_set_internal_(variable_name, variable_name_to_send, state_value);
+}
+
+void Nextion::add_no_result_to_queue_with_set_internal_(const std::string &variable_name,
+                                                        const std::string &variable_name_to_send,
+                                                        const std::string &state_value, bool is_sleep_safe) {
+  if ((!this->is_setup() && !this->ignore_is_setup_) || (!is_sleep_safe && this->is_sleeping()))
+    return;
+
+  this->add_no_result_to_queue_with_printf_(variable_name, "%s=\"%s\"", variable_name_to_send.c_str(),
+                                            state_value.c_str());
+}
+
+void Nextion::add_to_get_queue(NextionComponentBase *component) {
+  if ((!this->is_setup() && !this->ignore_is_setup_))
+    return;
+
+  this->nextion_queue_.push_back(component);
+
+  ESP_LOGN(TAG, "Add to queue type: %s component %s", component->get_queue_type_string().c_str(),
+           component->get_variable_name().c_str());
+
+  char command[64];
+  sprintf(command, "get %s", component->get_variable_name_to_send().c_str());
+  this->send_command_(command);
+}
+
+/**
+ * @brief Add addt command to the queue
+ *
+ * @param component_id The waveform component id
+ * @param wave_chan_id The waveform channel to send it to
+ * @param buffer_to_send The buffer size
+ * @param buffer_size The buffer data
+ */
+void Nextion::add_addt_command_to_queue(NextionComponentBase *component) {
+  if ((!this->is_setup() && !this->ignore_is_setup_) || this->is_sleeping())
+    return;
+
+  this->nextion_queue_.push_back(component);
+
+  size_t buffer_to_send = component->get_wave_buffer_size() < 255 ? component->get_wave_buffer_size()
+                                                                  : 255;  // ADDT command can only send 255
+
+  char command[64];
+  sprintf(command, "addt %d,%u,%zu", component->get_component_id(), component->get_wave_channel_id(), buffer_to_send);
+
+  this->send_command_(command);
+}
+
+void Nextion::set_writer(const nextion_writer_t &writer) { this->writer_ = writer; }
+
+ESPDEPRECATED("set_wait_for_ack(bool) is deprecated and has no effect")
+void Nextion::set_wait_for_ack(bool wait_for_ack) { ESP_LOGE(TAG, "This command is depreciated"); }
 
 <<<<<<< HEAD
 void Nextion::add_no_result_to_queue_with_set(std::string variable_name, std::string variable_name_to_send,

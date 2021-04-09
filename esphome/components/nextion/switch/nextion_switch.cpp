@@ -8,7 +8,11 @@ namespace nextion {
 static const char *TAG = "nextion_switch";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void NextionSwitch::process_bool(std::string variable_name, bool on) {
+=======
+void NextionSwitch::process_bool(const std::string &variable_name, bool on) {
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 void NextionSwitch::process_bool(const std::string &variable_name, bool on) {
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -48,7 +52,11 @@ void NextionSwitch::set_state(bool state, bool publish, bool send_to_nextion) {
   this->update_component_settings();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   ESP_LOGN(TAG, "Updated switch \"%s\" state %s", this->variable_name_.c_str(), state ? "ON" : "OFF");
+=======
+  ESP_LOGN(TAG, "Updated switch \"%s\" state %s", this->variable_name_.c_str(), ONOFF(state));
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   ESP_LOGN(TAG, "Updated switch \"%s\" state %s", this->variable_name_.c_str(), ONOFF(state));
 >>>>>>> SenexCrenshaw/nextion_upload

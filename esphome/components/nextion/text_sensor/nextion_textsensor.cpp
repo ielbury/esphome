@@ -7,7 +7,11 @@ namespace nextion {
 static const char *TAG = "nextion_textsensor";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void NextionTextSensor::process_text(std::string variable_name, std::string text_value) {
+=======
+void NextionTextSensor::process_text(const std::string &variable_name, const std::string &text_value) {
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 void NextionTextSensor::process_text(const std::string &variable_name, const std::string &text_value) {
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -26,7 +30,11 @@ void NextionTextSensor::update() {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void NextionTextSensor::set_state(std::string state, bool publish, bool send_to_nextion) {
+=======
+void NextionTextSensor::set_state(const std::string &state, bool publish, bool send_to_nextion) {
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 void NextionTextSensor::set_state(const std::string &state, bool publish, bool send_to_nextion) {
 >>>>>>> SenexCrenshaw/nextion_upload

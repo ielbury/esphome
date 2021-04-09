@@ -21,7 +21,11 @@ class NextionSensor : public NextionComponent, public sensor::Sensor, public Pol
   void set_wave_channel_id(uint8_t wave_chan_id) { this->wave_chan_id_ = wave_chan_id; }
   void set_wave_max_value(uint32_t wave_maxvalue) { this->wave_maxvalue_ = wave_maxvalue; }
 <<<<<<< HEAD
+<<<<<<< HEAD
   void process_sensor(std::string variable_name, int state) override;
+=======
+  void process_sensor(const std::string &variable_name, int state) override;
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   void process_sensor(const std::string &variable_name, int state) override;
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -37,7 +41,11 @@ class NextionSensor : public NextionComponent, public sensor::Sensor, public Pol
     return this->wave_chan_id_ == UINT8_MAX ? NextionQueueType::SENSOR : NextionQueueType::WAVEFORM_SENSOR;
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
   void set_state_from_string(std::string state_value, bool publish, bool send_to_nextion) override {}
+=======
+  void set_state_from_string(const std::string &state_value, bool publish, bool send_to_nextion) override {}
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   void set_state_from_string(const std::string &state_value, bool publish, bool send_to_nextion) override {}
 >>>>>>> SenexCrenshaw/nextion_upload

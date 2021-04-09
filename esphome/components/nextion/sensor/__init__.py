@@ -27,8 +27,11 @@ from ..base_component import (
 CODEOWNERS = ["@senexcrenshaw"]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 DEPENDENCIES = ["display"]
 
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 >>>>>>> SenexCrenshaw/nextion_upload
 NextionSensor = nextion_ns.class_("NextionSensor", sensor.Sensor, cg.PollingComponent)

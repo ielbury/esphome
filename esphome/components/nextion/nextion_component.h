@@ -3,9 +3,13 @@
 #include "esphome/core/color.h"
 #include "nextion_base.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef USE_API
 #include "esphome/components/api/api_server.h"
 #endif
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -18,7 +22,11 @@ class NextionComponent : public NextionComponentBase {
   void update_component_settings() override { this->update_component_settings(false); };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   void update_component_settings(bool ignore_needs_update) override;
+=======
+  void update_component_settings(bool force_update) override;
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   void update_component_settings(bool force_update) override;
 >>>>>>> SenexCrenshaw/nextion_upload

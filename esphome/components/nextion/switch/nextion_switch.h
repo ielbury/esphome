@@ -15,7 +15,11 @@ class NextionSwitch : public NextionComponent, public switch_::Switch, public Po
   void update() override;
   void update_component() override { this->update(); }
 <<<<<<< HEAD
+<<<<<<< HEAD
   void process_bool(std::string variable_name, bool on) override;
+=======
+  void process_bool(const std::string &variable_name, bool on) override;
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   void process_bool(const std::string &variable_name, bool on) override;
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -27,7 +31,11 @@ class NextionSwitch : public NextionComponent, public switch_::Switch, public Po
   void send_state_to_nextion() override { this->set_state(this->state, false, true); };
   NextionQueueType get_queue_type() override { return NextionQueueType::SWITCH; }
 <<<<<<< HEAD
+<<<<<<< HEAD
   void set_state_from_string(std::string state_value, bool publish, bool send_to_nextion) override {}
+=======
+  void set_state_from_string(const std::string &state_value, bool publish, bool send_to_nextion) override {}
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   void set_state_from_string(const std::string &state_value, bool publish, bool send_to_nextion) override {}
 >>>>>>> SenexCrenshaw/nextion_upload

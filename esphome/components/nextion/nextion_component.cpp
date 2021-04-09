@@ -13,6 +13,10 @@ void NextionComponent::set_background_color(Color bco) {
   this->update_component_settings();
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -27,6 +31,10 @@ void NextionComponent::set_background_pressed_color(Color bco2) {
   this->update_component_settings();
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -40,6 +48,10 @@ void NextionComponent::set_foreground_color(Color pco) {
   this->update_component_settings();
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -53,6 +65,10 @@ void NextionComponent::set_foreground_pressed_color(Color pco2) {
   this->update_component_settings();
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -66,6 +82,10 @@ void NextionComponent::set_font_id(uint8_t font_id) {
   this->update_component_settings();
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -80,7 +100,11 @@ void NextionComponent::set_visible(bool visible) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void NextionComponent::update_component_settings(bool ignore_needs_update) {
+=======
+void NextionComponent::update_component_settings(bool force_update) {
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 void NextionComponent::update_component_settings(bool force_update) {
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -91,7 +115,11 @@ void NextionComponent::update_component_settings(bool force_update) {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   if (this->visible_needs_update_ || (ignore_needs_update && this->visible_is_set_)) {
+=======
+  if (this->visible_needs_update_ || (force_update && this->visible_is_set_)) {
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   if (this->visible_needs_update_ || (force_update && this->visible_is_set_)) {
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -114,6 +142,7 @@ void NextionComponent::update_component_settings(bool force_update) {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   if (this->bco_needs_update_ || (ignore_needs_update && this->bco2_is_set_)) {
     this->nextion_->set_component_background_color(this->variable_name_.c_str(), this->bco_);
     this->bco_needs_update_ = false;
@@ -128,6 +157,8 @@ void NextionComponent::update_component_settings(bool force_update) {
   }
   if (this->pco2_needs_update_ || (ignore_needs_update && this->pco2_is_set_)) {
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   if (this->bco_needs_update_ || (force_update && this->bco2_is_set_)) {
     this->nextion_->set_component_background_color(this->variable_name_.c_str(), this->bco_);
     this->bco_needs_update_ = false;
@@ -141,13 +172,20 @@ void NextionComponent::update_component_settings(bool force_update) {
     this->pco_needs_update_ = false;
   }
   if (this->pco2_needs_update_ || (force_update && this->pco2_is_set_)) {
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
     this->nextion_->set_component_pressed_font_color(this->variable_name_.c_str(), this->pco2_);
     this->pco2_needs_update_ = false;
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   if (this->font_id_needs_update_ || (ignore_needs_update && this->font_id_is_set_)) {
+=======
+  if (this->font_id_needs_update_ || (force_update && this->font_id_is_set_)) {
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   if (this->font_id_needs_update_ || (force_update && this->font_id_is_set_)) {
 >>>>>>> SenexCrenshaw/nextion_upload

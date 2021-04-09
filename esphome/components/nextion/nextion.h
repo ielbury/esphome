@@ -1,6 +1,10 @@
 #pragma once
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#include <deque>
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 #include <deque>
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -33,6 +37,11 @@ class NextionComponentBase;
 using nextion_writer_t = std::function<void(Nextion &)>;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+static const std::string COMMAND_DELIMITER{static_cast<char>(255), static_cast<char>(255), static_cast<char>(255)};
+
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 static const std::string COMMAND_DELIMITER{static_cast<char>(255), static_cast<char>(255), static_cast<char>(255)};
 
@@ -102,7 +111,11 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * Example:
    * ```cpp
 <<<<<<< HEAD
+<<<<<<< HEAD
    * it.set_component_background_color("button", FF0000);
+=======
+   * it.set_component_background_color("button", 0xFF0000);
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
    * it.set_component_background_color("button", 0xFF0000);
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -147,7 +160,11 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * Example:
    * ```cpp
 <<<<<<< HEAD
+<<<<<<< HEAD
    * it.set_component_pressed_background_color("button", FF0000 );
+=======
+   * it.set_component_pressed_background_color("button", 0xFF0000 );
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
    * it.set_component_pressed_background_color("button", 0xFF0000 );
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -225,7 +242,11 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * Example:
    * ```cpp
 <<<<<<< HEAD
+<<<<<<< HEAD
    * it.set_component_font_color("textview", FF0000);
+=======
+   * it.set_component_font_color("textview", 0xFF0000);
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
    * it.set_component_font_color("textview", 0xFF0000);
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -272,7 +293,11 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * Example:
    * ```cpp
 <<<<<<< HEAD
+<<<<<<< HEAD
    * it.set_component_pressed_font_color("button", FF0000);
+=======
+   * it.set_component_pressed_font_color("button", 0xFF0000);
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
    * it.set_component_pressed_font_color("button", 0xFF0000);
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -664,6 +689,10 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   void set_writer(const nextion_writer_t &writer);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  // This function has been depreciated
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   // This function has been depreciated
 >>>>>>> SenexCrenshaw/nextion_upload
@@ -711,12 +740,15 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   void update_all_components();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   void set_touch_sleep_timeout_internal(uint32_t touch_sleep_timeout) {
     this->touch_sleep_timeout_ = touch_sleep_timeout;
   }
   void set_wake_up_page_internal(uint8_t wake_up_page) { this->wake_up_page_ = wake_up_page; }
   void set_auto_wake_on_touch_internal(bool auto_wake_on_touch) { this->auto_wake_on_touch_ = auto_wake_on_touch; }
 
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 >>>>>>> SenexCrenshaw/nextion_upload
   /**
@@ -732,6 +764,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * State to set.
    */
 <<<<<<< HEAD
+<<<<<<< HEAD
   void set_nextion_sensor_state(int queue_type, std::string name, float state);
   void set_nextion_sensor_state(NextionQueueType queue_type, std::string name, float state);
   void set_nextion_text_state(std::string name, std::string state);
@@ -744,6 +777,8 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   void add_no_result_to_queue_with_set(std::string variable_name, std::string variable_name_to_send,
                                        std::string state_value) override;
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   void set_nextion_sensor_state(int queue_type, const std::string &name, float state);
   void set_nextion_sensor_state(NextionQueueType queue_type, const std::string &name, float state);
   void set_nextion_text_state(const std::string &name, const std::string &state);
@@ -755,6 +790,9 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   void add_no_result_to_queue_with_set(NextionComponentBase *component, const std::string &state_value) override;
   void add_no_result_to_queue_with_set(const std::string &variable_name, const std::string &variable_name_to_send,
                                        const std::string &state_value) override;
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
 
   void add_to_get_queue(NextionComponentBase *component) override;
@@ -762,8 +800,11 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   void add_addt_command_to_queue(NextionComponentBase *component) override;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   void update_components_by_prefix(std::string page);
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   void update_components_by_prefix(const std::string &prefix);
 
   void set_touch_sleep_timeout_internal(uint32_t touch_sleep_timeout) {
@@ -771,14 +812,22 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   }
   void set_wake_up_page_internal(uint8_t wake_up_page) { this->wake_up_page_ = wake_up_page; }
   void set_auto_wake_on_touch_internal(bool auto_wake_on_touch) { this->auto_wake_on_touch_ = auto_wake_on_touch; }
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
 
  protected:
   std::deque<NextionComponentBase *> nextion_queue_;
   uint16_t recv_ret_string_(std::string &response, uint32_t timeout, bool recv_flag);
 <<<<<<< HEAD
+<<<<<<< HEAD
   void all_components_send_state_(bool ignore_needs_update = false);
 
+=======
+  void all_components_send_state_(bool force_update = false);
+  long comok_sent_ = 0;
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
   void all_components_send_state_(bool force_update = false);
   long comok_sent_ = 0;
@@ -792,12 +841,17 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   // bool nextion_has_event_ = false;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   bool process_nextion_commands_();
 =======
   void process_nextion_commands_();
 <<<<<<< HEAD
 >>>>>>> SenexCrenshaw/nextion_upload
 =======
+  void process_serial_();
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
+  void process_nextion_commands_();
   void process_serial_();
 >>>>>>> SenexCrenshaw/nextion_upload
   bool is_updating_ = false;
@@ -810,6 +864,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * @param command The command to write, for example "vis b0,0".
    */
   bool send_command_(const char *command);
+<<<<<<< HEAD
 <<<<<<< HEAD
   void add_no_result_to_queue_(std::string variable_name);
   void add_no_result_to_queue_with_command_(std::string variable_name, std::string command);
@@ -824,6 +879,8 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
                                                  std::string state_value, bool is_sleep_safe = false);
 
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   void add_no_result_to_queue_(const std::string &variable_name);
   void add_no_result_to_queue_with_command_(const std::string &variable_name, const std::string &command);
 
@@ -839,6 +896,9 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
                                                  const std::string &state_value, bool is_sleep_safe = false);
 
 #ifdef USE_TFT_UPLOAD
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
 #if defined(USE_ETHERNET) || defined(USE_WIFI)
 #ifdef ARDUINO_ARCH_ESP8266
@@ -848,7 +908,10 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #ifdef USE_TFT_UPLOAD
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 >>>>>>> SenexCrenshaw/nextion_upload
   /**
@@ -885,10 +948,13 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   void upload_end_();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   bool check_connect_();
   void set_is_connected_(bool is_connected) { this->is_connected_ = is_connected; }
   bool get_is_connected_() { return this->is_connected_; }
 
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 >>>>>>> SenexCrenshaw/nextion_upload
 #endif
@@ -896,11 +962,17 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   bool get_is_connected_() { return this->is_connected_; }
 
   bool check_connect_();
 
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
   std::vector<NextionComponentBase *> touch_;
   std::vector<NextionComponentBase *> switchtype_;
@@ -914,15 +986,21 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   float brightness_{1.0};
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   char device_model_[64];
   char firmware_version_[64];
   char serial_number_[64];
   char flash_size_[64];
 =======
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
   std::string device_model_;
   std::string firmware_version_;
   std::string serial_number_;
   std::string flash_size_;
+<<<<<<< HEAD
+>>>>>>> SenexCrenshaw/nextion_upload
+=======
 >>>>>>> SenexCrenshaw/nextion_upload
 
   void remove_front_no_sensors_();
@@ -941,7 +1019,10 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
 
   std::string command_data_;
 <<<<<<< HEAD
+<<<<<<< HEAD
   std::string command_delimiter_;
+=======
+>>>>>>> SenexCrenshaw/nextion_upload
 =======
 >>>>>>> SenexCrenshaw/nextion_upload
   bool is_connected_ = false;
